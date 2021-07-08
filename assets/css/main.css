@@ -1,0 +1,76 @@
+:root {
+  --color-turing-blue: blue;
+  --color-turing-red: red;
+  --color-bg: black;
+  --color-primary: #ffffffaf;
+  --color-prominent: white;
+  --color-less-prominent: white;
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-7: 28px;
+  --spacing-8: 32px;
+  --width-max: 1200px;
+}
+
+html {
+  font-size: 112.5%;
+} /* 18px */
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  line-height: 1.45;
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  margin: 3rem 0 1.38rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--color-prominent);
+}
+
+h1 {
+  margin-top: 0;
+  font-size: 3.052rem;
+}
+
+h2 {
+  font-size: 2.441rem;
+}
+
+h3 {
+  font-size: 1.953rem;
+}
+
+h4 {
+  font-size: 1.563rem;
+}
+
+h5 {
+  font-size: 1.25rem;
+}
+
+small,
+.text_small {
+  font-size: 0.8rem;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+}
