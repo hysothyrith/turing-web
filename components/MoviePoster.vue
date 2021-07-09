@@ -19,7 +19,6 @@ export default {
 
 <style scoped>
 .poster {
-  margin-right: var(--spacing-6);
   transition: transform 200ms ease;
   cursor: pointer;
 }

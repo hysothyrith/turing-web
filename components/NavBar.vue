@@ -3,7 +3,7 @@
     <nuxt-link to="/" class="brand">Turing Cinemas</nuxt-link>
     <div class="links">
       <nuxt-link to="/cinemas" class="link">Cinemas</nuxt-link>
-      <nuxt-link to="/showtimes" class="link">Showtimes</nuxt-link>
+      <nuxt-link to="/showtimes" class="link">Showtime</nuxt-link>
       <nuxt-link to="/concession" class="link">Concession</nuxt-link>
     </div>
     <div class="background" :style="{ opacity: backgroundOpacity }"></div>
@@ -55,14 +55,14 @@ nav {
   text-decoration: none;
   color: inherit;
   font-weight: 600;
-  margin: 0 var(--spacing-8);
+  margin: 0 var(--spacing-4);
 }
 
 .links {
   display: flex;
   flex-grow: 1;
   justify-content: flex-end;
-  margin: 0 var(--spacing-8);
+  margin: 0 var(--spacing-4);
 }
 
 .brand,
@@ -74,5 +74,15 @@ nav {
   text-decoration: none;
   color: inherit;
   margin-left: var(--spacing-4);
+}
+
+@media only screen and (min-width: 720px) {
+  .brand {
+    margin: 0 var(--spacing-8);
+  }
+
+  .links {
+    margin: 0 var(--spacing-8);
+  }
 }
 </style>

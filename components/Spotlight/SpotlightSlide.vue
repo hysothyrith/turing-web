@@ -12,11 +12,14 @@
       :src="currentMovie.backdrop"
       :alt="`${currentMovie.title} backdrop`"
       class="backdrop"
+      @load="enter"
     />
     <div class="info">
       <h2 class="title">{{ currentMovie.title }}</h2>
-      <small class="genres">{{ currentMovie.genres.join(', ') }}</small>
-      <rating rating="PG-13" />
+      <div class="meta">
+        <small class="genres">{{ currentMovie.genres.join(', ') }}</small>
+        <rating rating="PG-13" />
+      </div>
       <p class="synopsis">{{ currentMovie.synopsis }}</p>
     </div>
     <div class="overlay" />
@@ -43,17 +46,29 @@ export default {
     return {
       ENTER,
       LEAVE,
-      transition: ENTER,
+      transition: LEAVE,
       currentMovie: this.movie,
     }
   },
   watch: {
     movie(newVal) {
-      this.transition = LEAVE
+      this.leave()
+
+      // Prefetch the new movie's backdrop
+      const backdrop = new Image()
+      backdrop.src = newVal.backdrop
+
       setTimeout(() => {
         this.currentMovie = newVal
-        this.transition = ENTER
       }, transitionDuration)
+    },
+  },
+  methods: {
+    leave() {
+      this.transition = LEAVE
+    },
+    enter() {
+      this.transition = ENTER
     },
   },
 }
@@ -70,18 +85,12 @@ export default {
   max-height: 90vh;
   object-fit: cover;
   object-position: top;
-  transition: opacity 600ms ease;
-}
-
-.info,
-.title,
-.synopsis {
-  transition: opacity 400ms ease, transform 700ms ease;
+  transition: opacity 500ms ease;
 }
 
 .info {
   position: absolute;
-  bottom: 4vw;
+  bottom: 8vw;
   margin-left: 4vw;
   z-index: 1;
 }
@@ -99,6 +108,7 @@ export default {
   position: absolute;
   width: 100%;
   height: 100%;
+  transition: none;
   background: rgb(0, 0, 0);
   background: linear-gradient(
       25deg,
@@ -115,7 +125,11 @@ export default {
     );
 }
 
-/* transitions */
+/* Transitions */
+.info * {
+  transition: opacity 400ms ease, transform 600ms ease;
+}
+
 .enter .backdrop {
   opacity: 1;
 }
@@ -124,21 +138,22 @@ export default {
   opacity: 0;
 }
 
-.enter .info,
-.enter .title,
-.enter .synopsis {
+.enter .info * {
   opacity: 1;
   transform: translateY(0);
 }
 
-.leave .info,
-.leave .title {
-  opacity: 0;
-  transform: translateY(40px);
-}
-
-.leave .synopsis {
+.leave .info * {
   opacity: 0;
   transform: translateY(60px);
+}
+
+.title {
+  transition-delay: 100ms;
+  margin-bottom: var(--spacing-1);
+}
+
+.meta {
+  transition-delay: 50ms;
 }
 </style>

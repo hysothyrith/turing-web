@@ -1,8 +1,8 @@
 <template>
   <div class="spotlight">
     <spotlight-slide :movie="movies[index]" :interval="interval" />
-    <!-- <button @click="pause">Pause</button> -->
-    <!-- <button @click="next">Tick</button> -->
+    <!-- <button @click="pause">Pause</button>
+    <button @click="next">Tick</button> -->
   </div>
 </template>
 
