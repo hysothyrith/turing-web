@@ -30,12 +30,6 @@ export default Vue.extend({
 
 <style scoped>
 .main {
-  margin: 0 var(--spacing-4);
-}
-
-@media only screen and (min-width: 720px) {
-  .main {
-    margin: 0 var(--spacing-8);
-  }
+  margin: 0 var(--spacing-side);
 }
 </style>

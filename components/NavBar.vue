@@ -55,14 +55,14 @@ nav {
   text-decoration: none;
   color: inherit;
   font-weight: 600;
-  margin: 0 var(--spacing-4);
+  margin: 0 var(--spacing-side);
 }
 
 .links {
   display: flex;
   flex-grow: 1;
   justify-content: flex-end;
-  margin: 0 var(--spacing-4);
+  margin: 0 var(--spacing-side);
 }
 
 .brand,
@@ -74,15 +74,5 @@ nav {
   text-decoration: none;
   color: inherit;
   margin-left: var(--spacing-4);
-}
-
-@media only screen and (min-width: 720px) {
-  .brand {
-    margin: 0 var(--spacing-8);
-  }
-
-  .links {
-    margin: 0 var(--spacing-8);
-  }
 }
 </style>

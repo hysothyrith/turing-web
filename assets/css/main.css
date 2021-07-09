@@ -13,7 +13,14 @@
   --spacing-6: 24px;
   --spacing-7: 28px;
   --spacing-8: 32px;
+  --spacing-side: var(--spacing-4);
   --width-max: 1200px;
+}
+
+@media only screen and (min-width: 720px) {
+  :root {
+    --spacing-side: var(--spacing-8);
+  }
 }
 
 html {

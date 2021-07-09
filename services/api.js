@@ -4,6 +4,7 @@ const API = {
       {
         id: 1,
         title: 'Luca',
+        rating: 'G',
         poster:
           'https://www.themoviedb.org/t/p/original/jTswp6KyDYKtvC52GbHagrZbGvD.jpg',
         backdrop:
@@ -15,6 +16,7 @@ const API = {
       {
         id: 2,
         title: 'Joker',
+        rating: 'R',
         poster:
           'https://www.themoviedb.org/t/p/original/tfzagTRS9eLEwC3UMmYqiA48D8k.jpg',
         backdrop:
@@ -26,6 +28,7 @@ const API = {
       {
         id: 3,
         title: 'Tenet',
+        rating: 'PG-13',
         poster:
           'https://www.themoviedb.org/t/p/original/k68nPLbIST6NP96JmTxmZijEvCA.jpg',
         backdrop:

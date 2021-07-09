@@ -8,17 +8,13 @@
       },
     ]"
   >
-    <img
-      :src="currentMovie.backdrop"
-      :alt="`${currentMovie.title} backdrop`"
-      class="backdrop"
-      @load="enter"
-    />
+    <movie-backdrop class="backdrop" :movie="currentMovie" @load="enter" />
     <div class="info">
       <h2 class="title">{{ currentMovie.title }}</h2>
       <div class="meta">
-        <small class="genres">{{ currentMovie.genres.join(', ') }}</small>
-        <rating rating="PG-13" />
+        <movie-genres :genres="currentMovie.genres" />
+        <spacer axis="horizontal" size="2" />
+        <movie-rating>{{ currentMovie.rating }}</movie-rating>
       </div>
       <p class="synopsis">{{ currentMovie.synopsis }}</p>
     </div>
@@ -80,11 +76,8 @@ export default {
 }
 
 .backdrop {
-  width: 100vw;
   height: 70vw;
   max-height: 90vh;
-  object-fit: cover;
-  object-position: top;
   transition: opacity 500ms ease;
 }
 
@@ -93,10 +86,6 @@ export default {
   bottom: 8vw;
   margin-left: 4vw;
   z-index: 1;
-}
-
-.genres {
-  margin-right: var(--spacing-2);
 }
 
 .synopsis {
@@ -108,21 +97,13 @@ export default {
   position: absolute;
   width: 100%;
   height: 100%;
-  transition: none;
   background: rgb(0, 0, 0);
   background: linear-gradient(
-      25deg,
-      rgba(0, 0, 0, 1) 0%,
-      rgba(0, 0, 0, 0.36458333333333337) 50%,
-      rgba(0, 0, 0, 0) 100%
-    ),
-    linear-gradient(
-      0deg,
-      rgba(0, 0, 0, 1) 0%,
-      rgba(0, 0, 0, 0.5690651260504201) 20%,
-      rgba(0, 0, 0, 0.20211834733893552) 60%,
-      rgba(0, 0, 0, 0) 100%
-    );
+    25deg,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.36458333333333337) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
 }
 
 /* Transitions */

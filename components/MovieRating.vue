@@ -1,17 +1,8 @@
 <template>
-  <small class="rating">{{ rating }}</small>
+  <small class="rating">
+    <slot />
+  </small>
 </template>
-
-<script>
-export default {
-  props: {
-    rating: {
-      type: String,
-      required: true,
-    },
-  },
-}
-</script>
 
 <style scoped>
 .rating {
