@@ -3,7 +3,7 @@
     <nuxt-link to="/" class="brand">Turing Cinemas</nuxt-link>
     <div class="links">
       <nuxt-link to="/cinemas" class="link">Cinemas</nuxt-link>
-      <nuxt-link to="/showtimes" class="link">Showtime</nuxt-link>
+      <nuxt-link to="/showtime" class="link">Showtime</nuxt-link>
       <nuxt-link to="/concession" class="link">Concession</nuxt-link>
     </div>
     <div class="background" :style="{ opacity: backgroundOpacity }"></div>

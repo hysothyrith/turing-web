@@ -132,6 +132,7 @@ export default {
 .title {
   transition-delay: 100ms;
   margin-bottom: var(--spacing-1);
+  font-size: 2.488rem;
 }
 
 .meta {

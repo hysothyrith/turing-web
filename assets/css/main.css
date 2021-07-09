@@ -4,7 +4,8 @@
   --color-bg: black;
   --color-primary: #ffffffaf;
   --color-prominent: white;
-  --color-less-prominent: white;
+  --color-less-prominent: #949494;
+  --color-muted: #4a4a4a72;
   --spacing-1: 4px;
   --spacing-2: 8px;
   --spacing-3: 12px;
@@ -32,7 +33,7 @@ body {
   color: var(--color-primary);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  line-height: 1.45;
+  line-height: 1.75;
 }
 
 p {
@@ -45,7 +46,8 @@ h3,
 h4,
 h5 {
   margin: 3rem 0 1.38rem;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   font-weight: 600;
   line-height: 1.3;
   color: var(--color-prominent);
@@ -53,28 +55,28 @@ h5 {
 
 h1 {
   margin-top: 0;
-  font-size: 3.052rem;
+  font-size: 1.802rem;
 }
 
 h2 {
-  font-size: 2.441rem;
+  font-size: 1.602rem;
 }
 
 h3 {
-  font-size: 1.953rem;
+  font-size: 1.424rem;
 }
 
 h4 {
-  font-size: 1.563rem;
+  font-size: 1.266rem;
 }
 
 h5 {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
 }
 
 small,
 .text_small {
-  font-size: 0.8rem;
+  font-size: 0.889rem;
 }
 
 img {

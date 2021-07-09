@@ -11,7 +11,7 @@ const API = {
           'https://www.themoviedb.org/t/p/original/620hnMVLu6RSZW6a5rwO8gqpt0t.jpg',
         genres: ['Action', 'Comedy'],
         synopsis:
-          'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Atque totam cum beatae necessitatibus cupiditate distinctio quam tempore minima, non cumque, iure deserunt unde perspiciatis deleniti nihil facilis odio doloremque. Ratione.',
+          'Luca and his best friend Alberto experience an unforgettable summer on the Italian Riviera. But all the fun is threatened by a deeply-held secret: they are sea monsters from another world just below the water’s surface.',
       },
       {
         id: 2,
@@ -23,7 +23,7 @@ const API = {
           'https://www.themoviedb.org/t/p/original/hO7KbdvGOtDdeg0W4Y5nKEHeDDh.jpg',
         genres: ['Adventure'],
         synopsis:
-          'Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur pariatur, nulla aut recusandae assumenda necessitatibus impedit enim molestias porro ipsa corrupti officiis soluta quae nemo reprehenderit rerum commodi libero sapiente?',
+          'During the 1980s, a failed stand-up comedian is driven insane and turns to a life of crime and chaos in Gotham City while becoming an infamous psychopathic crime figure.',
       },
       {
         id: 3,
@@ -35,7 +35,7 @@ const API = {
           'https://www.themoviedb.org/t/p/original/wzJRB4MKi3yK138bJyuL9nx47y6.jpg',
         genres: ['Science fiction', 'Thriller'],
         synopsis:
-          'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia itaque nemo sint totam dolores delectus sunt eaque minima repellendus suscipit non, voluptates nostrum molestias, sed quod illo ducimus officia facere.',
+          'Armed with only one word - Tenet - and fighting for the survival of the entire world, the Protagonist journeys through a twilight world of international espionage on a mission that will unfold in something beyond real time.',
       },
     ]
   },

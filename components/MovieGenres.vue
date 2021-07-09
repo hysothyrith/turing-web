@@ -1,5 +1,7 @@
 <template>
-  <small>{{ allGenres }}</small>
+  <small :style="{ color: 'var(--color-less-prominent)' }">{{
+    allGenres
+  }}</small>
 </template>
 
 <script>

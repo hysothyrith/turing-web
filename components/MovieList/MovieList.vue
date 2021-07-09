@@ -1,6 +1,6 @@
 <template>
   <div class="movie-list">
-    <h4 class="title">{{ title }}</h4>
+    <h2 class="title">{{ title }}</h2>
     <div class="posters">
       <movie-poster v-for="movie in movies" :key="movie.id" :movie="movie" />
     </div>
@@ -33,7 +33,13 @@ export default {
 
 .posters {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: var(--spacing-4);
+}
+
+@media only screen and (min-width: 720px) {
+  .posters {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
 }
 </style>
