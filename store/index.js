@@ -1,9 +1,7 @@
 import { Actions, Getters, Mutations } from '~/constants'
-import { mapKeys } from '~/utils/objects'
 
 export const state = () => ({
   user: null,
-  movies: [], // TODO: remove
   spotlightMovies: [],
   nowScreeningMovies: [],
   upcomingMovies: [],
@@ -24,10 +22,6 @@ export const mutations = {
     this.$axios.setToken('')
     localStorage.removeItem('user')
     localStorage.removeItem('token')
-  },
-  // TODO: remove
-  [Mutations.SET_MOVIES](state, movies) {
-    state.movies = movies
   },
   [Mutations.SET_SPOTLIGHT_MOVIES](state, movies) {
     state.spotlightMovies = movies
@@ -53,12 +47,37 @@ export const getters = {
   [Getters.isAuthenticated](state) {
     return state.user !== null
   },
+  [Getters.getShowtimesOnDate]: (state) => (dateString) => {
+    const screenings = state.showtimes.filter((movie) =>
+      Object.keys(movie.screenings).includes(dateString)
+    )
+
+    return screenings.map((movie) => {
+      return {
+        ...movie,
+        screenings: undefined,
+        showtimes: movie.screenings[dateString].map((screening) => {
+          return {
+            id: screening.id,
+            startTime: screening.start_time,
+          }
+        }),
+      }
+    })
+  },
 }
 
 export const actions = {
+  async [Actions.signup]({ commit }, creds) {
+    const data = await this.$axios.$post('register', {
+      ...creds,
+      phoneNumber: '012100200',
+    })
+    commit(Mutations.SET_AUTH_DATA, data)
+  },
   async [Actions.login]({ commit }, creds) {
-    const res = await this.$axios.$post('login', creds)
-    commit(Mutations.SET_AUTH_DATA, res)
+    const data = await this.$axios.$post('login', creds)
+    commit(Mutations.SET_AUTH_DATA, data)
   },
   async [Actions.getSpotlightMovies]({ commit }) {
     const spotlightMovies = await this.$axios.$get('movies/advertisement')
@@ -93,13 +112,19 @@ export const actions = {
     commit(Mutations.SET_CURRENT_MOVIE, movie)
   },
   async [Actions.getShowtimes]({ commit }) {
-    const data = await this.$axios.$get('screenings')
+    const data = await this.$axios.$get('screenings/now-showing')
     const showtimes = data.map((movie) => {
-      const screenings = movie.screenings.map((screening) =>
-        mapKeys({ start_time: 'startTime' })(screening)
-      )
-      return { ...movie, screenings }
+      return {
+        ...movie,
+        directors: mapToNames(movie.directors),
+        cast: mapToNames(movie.casts),
+        genres: mapToNames(movie.genres),
+        trailer: movie.trailerUrl,
+        casts: undefined,
+        trailerUrl: undefined,
+      }
     })
+
     commit(Mutations.SET_SHOWTIMES, showtimes)
   },
   async [Actions.getTheatre]({ commit }, screeningId) {

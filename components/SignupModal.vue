@@ -12,12 +12,21 @@
           <form class="form" @submit.prevent="onSubmit">
             <h1 class="h4-size">Sign up for a Turing account</h1>
             <div class="input-group">
+              <label for="name">Name</label>
+              <input id="name" v-model="name" type="text" required />
+            </div>
+            <div class="input-group">
               <label for="email">Email</label>
-              <input id="email" type="email" required />
+              <input id="email" v-model="email" type="email" required />
             </div>
             <div class="input-group">
               <label for="password">Password</label>
-              <input id="password" type="password" required />
+              <input
+                id="password"
+                v-model="password"
+                type="password"
+                required
+              />
             </div>
             <t-button type="submit" class="w-100 mt-4" :loading="loading"
               >Sign up</t-button
@@ -36,15 +45,33 @@
 </template>
 
 <script>
+import { Actions } from '~/constants'
 export default {
   data() {
     return {
       loading: false,
+      name: '',
+      email: '',
+      password: '',
     }
   },
   methods: {
     onSubmit() {
-      this.loading = !this.loading
+      this.loading = true
+      this.$store
+        .dispatch(Actions.signup, {
+          name: this.name,
+          email: this.email,
+          password: this.password,
+        })
+        .then(() => {
+          this.$modal.hide('signup')
+          this.loading = false
+        })
+        .catch((err) => {
+          this.loading = false
+          alert(err)
+        })
     },
     onLoginClick() {
       this.$modal.hide('signup')

@@ -60,9 +60,9 @@ export default {
         })
         .then(() => {
           this.$modal.hide('login')
+          this.loading = false
         })
         .catch(() => (this.loading = false))
-      this.loading = false
     },
     onSignUpClick() {
       this.$modal.hide('login')

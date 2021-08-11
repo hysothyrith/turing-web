@@ -1,4 +1,5 @@
 export const login = 'login'
+export const signup = 'signup'
 export const getSpotlightMovies = 'getSpotlightMovies'
 export const getMovies = 'getMovies'
 export const getMovie = 'getMovie'
