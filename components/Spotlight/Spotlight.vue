@@ -1,13 +1,17 @@
 <template>
   <div class="spotlight">
-    <spotlight-slide :movie="movies[index]" :interval="interval" />
-    <!-- <button @click="pause">Pause</button>
-    <button @click="next">Tick</button> -->
+    <spotlight-slide
+      v-if="status.isResolved()"
+      :movie="movies[index]"
+      :interval="interval"
+    />
   </div>
 </template>
 
 <script>
-import API from '~/services/api'
+import { mapState } from 'vuex'
+import { Actions } from '~/constants'
+import AsyncStatus from '~/utils/AsyncStatus'
 
 export default {
   props: {
@@ -18,13 +22,23 @@ export default {
   },
   data() {
     return {
+      status: new AsyncStatus(),
       index: 0,
       tick: null,
-      movies: API.getMovies(),
     }
   },
+  computed: {
+    ...mapState({ movies: (state) => state.spotlightMovies }),
+  },
   mounted() {
-    this.tick = setInterval(this.next, this.interval)
+    this.status.beginLoading()
+    this.$store
+      .dispatch(Actions.getSpotlightMovies)
+      .then(() => {
+        this.status.resolve()
+        this.tick = setInterval(this.next, this.interval)
+      })
+      .catch((err) => alert(err))
   },
   methods: {
     next() {
@@ -36,3 +50,10 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.spotlight {
+  height: 70vw;
+  max-height: 90vh;
+}
+</style>

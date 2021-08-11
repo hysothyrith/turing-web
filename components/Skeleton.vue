@@ -1,8 +1,13 @@
 <template>
   <div
     class="skeleton"
-    :style="{ width, height, animationDelay: `${delay * 0.1}s` }"
-  />
+    :style="{
+      width,
+      height,
+      animationDelay: `${delay * 0.1}s`,
+      borderRadius: borderRadius,
+    }"
+  ></div>
 </template>
 
 <script>
@@ -19,6 +24,10 @@ export default {
     height: {
       type: String,
       default: '100%',
+    },
+    borderRadius: {
+      type: String,
+      default: '0',
     },
   },
 }

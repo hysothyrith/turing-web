@@ -1,16 +1,27 @@
 <template>
-  <nuxt-link :to="`/movies/${movie.id}`">
-    <div class="poster">
-      <img class="image" :src="movie.poster" :alt="`${movie.title} poster`" />
-    </div>
-  </nuxt-link>
+  <div class="wrapper">
+    <sized-image
+      :src="src"
+      :size="size"
+      :alt="`${movieTitle} poster`"
+      class="poster"
+    />
+  </div>
 </template>
 
 <script>
 export default {
   props: {
-    movie: {
-      type: Object,
+    src: {
+      type: String,
+      required: true,
+    },
+    size: {
+      type: String,
+      default: 'w500',
+    },
+    movieTitle: {
+      type: String,
       required: true,
     },
   },
@@ -18,16 +29,16 @@ export default {
 </script>
 
 <style scoped>
+.wrapper {
+  width: 100%;
+  padding-top: calc(40 / 27 * 100%);
+  position: relative;
+}
+
 .poster {
-  transition: transform 200ms ease;
-  cursor: pointer;
-}
-
-.poster:hover {
-  transform: scale(1.05);
-}
-
-.image {
+  position: absolute;
+  top: 0;
+  left: 0;
   object-fit: cover;
 }
 </style>

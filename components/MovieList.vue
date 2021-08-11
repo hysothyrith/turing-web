@@ -1,7 +1,7 @@
 <template>
   <div class="movie-list">
-    <template v-if="loading">
-      <skeleton width="26ch" height="2rem" />
+    <template v-if="loading || !movies">
+      <skeleton width="26ch" height="2rem" border-radius="1rem" />
       <spacer size="1" />
       <div class="posters">
         <skeleton
@@ -15,7 +15,14 @@
     <template v-else>
       <h2 class="title">{{ title }}</h2>
       <div class="posters">
-        <movie-poster v-for="movie in movies" :key="movie.id" :movie="movie" />
+        <nuxt-link
+          v-for="movie in movies"
+          :key="movie.id"
+          :to="`/movies/${movie.id}`"
+          class="poster__link"
+        >
+          <movie-poster :src="movie.poster" :movie-title="movie.title" />
+        </nuxt-link>
       </div>
     </template>
   </div>
@@ -30,7 +37,7 @@ export default {
     },
     movies: {
       type: Array,
-      required: true,
+      default: null,
     },
     loading: {
       type: Boolean,
@@ -43,7 +50,11 @@ export default {
     }
   },
   mounted() {
-    this.skeletonCount = Math.floor(window.innerWidth / 250)
+    if (window.innerWidth < 720) {
+      this.skeletonCount = Math.floor(window.innerWidth / 110)
+    } else {
+      this.skeletonCount = Math.floor(window.innerWidth / 240)
+    }
   },
 }
 </script>
@@ -59,7 +70,7 @@ export default {
 
 .posters {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   gap: var(--spacing-4);
 }
 
@@ -69,6 +80,14 @@ export default {
   height: 0;
   width: 0;
   padding-bottom: calc(2.9 / 2 * 100%);
+}
+
+.poster__link {
+  transition: transform 150ms ease-out;
+}
+
+.poster__link:hover {
+  transform: scale(1.04);
 }
 
 @media only screen and (min-width: 720px) {

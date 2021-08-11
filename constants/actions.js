@@ -1,0 +1,6 @@
+export const login = 'login'
+export const getSpotlightMovies = 'getSpotlightMovies'
+export const getMovies = 'getMovies'
+export const getMovie = 'getMovie'
+export const getTheatre = 'getTheatre'
+export const getShowtimes = 'getShowtimes'

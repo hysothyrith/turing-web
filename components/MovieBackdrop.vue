@@ -1,8 +1,9 @@
 <template>
   <div class="wrapper">
-    <img
-      :src="movie.backdrop"
-      :alt="`${movie.title} backdrop`"
+    <sized-image
+      :src="src"
+      :alt="`${movieTitle} backdrop`"
+      :size="size"
       class="backdrop"
       @load="$emit('load')"
     />
@@ -13,9 +14,17 @@
 <script>
 export default {
   props: {
-    movie: {
-      type: Object,
+    src: {
+      type: String,
       required: true,
+    },
+    movieTitle: {
+      type: String,
+      required: true,
+    },
+    size: {
+      type: String,
+      default: 'original',
     },
   },
 }

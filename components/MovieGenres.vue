@@ -1,6 +1,6 @@
 <template>
   <small :style="{ color: 'var(--color-less-prominent)' }">{{
-    allGenres
+    genres.join(', ')
   }}</small>
 </template>
 
@@ -10,11 +10,6 @@ export default {
     genres: {
       type: Array,
       required: true,
-    },
-  },
-  computed: {
-    allGenres() {
-      return this.genres.join(', ')
     },
   },
 }

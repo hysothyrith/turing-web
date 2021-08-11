@@ -8,7 +8,12 @@
       },
     ]"
   >
-    <movie-backdrop class="backdrop" :movie="currentMovie" @load="enter" />
+    <movie-backdrop
+      class="backdrop"
+      :src="currentMovie.backdrop"
+      :movie-title="currentMovie.title"
+      @load="enter"
+    />
     <div class="info">
       <h2 class="title">{{ currentMovie.title }}</h2>
       <div class="meta">
@@ -52,7 +57,7 @@ export default {
 
       // Prefetch the new movie's backdrop
       const backdrop = new Image()
-      backdrop.src = newVal.backdrop
+      backdrop.src = `http://localhost:8000/uploads/images/original${newVal.backdrop}`
 
       setTimeout(() => {
         this.currentMovie = newVal
