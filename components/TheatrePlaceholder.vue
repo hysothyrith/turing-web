@@ -1,20 +1,23 @@
 <template>
   <div class="wrapper">
-    <template v-for="i in 10">
-      <div
-        v-for="j in 15"
-        :key="`${i},${j}`"
-        class="d-flex justify-content-center"
-      >
-        <div class="seat" />
+    <theatre-screen />
+    <div class="grid">
+      <template v-for="i in 10">
+        <div
+          v-for="j in 15"
+          :key="`${i},${j}`"
+          class="d-flex justify-content-center"
+        >
+          <div class="seat" />
+        </div>
+      </template>
+      <div class="overlay">
+        {{
+          loading
+            ? 'Loading theatre...'
+            : 'Select a cinema, date, and time to continue'
+        }}
       </div>
-    </template>
-    <div class="overlay">
-      {{
-        loading
-          ? 'Loading theatre'
-          : 'Select a cinema, date, and time to continue'
-      }}
     </div>
   </div>
 </template>
@@ -33,12 +36,18 @@ export default {
 <style scoped>
 .wrapper {
   position: relative;
-  display: grid;
-  grid-template-columns: repeat(15, 1fr);
   border: var(--b-width) solid var(--color-muted);
-  border-radius: 4px;
-  width: 100%;
   padding: var(--spacing-4) var(--spacing-2);
+  border-radius: 4px;
+}
+
+.grid {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: repeat(15, 1fr);
+  width: 100%;
+  gap: 1px;
+  overflow: scroll;
 }
 
 .seat {
@@ -61,6 +70,6 @@ export default {
   justify-content: center;
   align-items: center;
   color: var(--color-less-prominent);
-  background-color: rgba(0, 0, 0, 0.324);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 </style>

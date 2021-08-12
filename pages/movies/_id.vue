@@ -263,9 +263,12 @@ label {
   justify-content: center;
   margin-top: -120px;
   margin-bottom: 200px;
+  flex-grow: 1;
+  flex-basis: auto;
 }
 
 .main {
+  min-width: 0;
   max-width: var(--width-max);
   z-index: 1;
   margin: var(--spacing-side);

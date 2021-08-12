@@ -41,7 +41,7 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ['@nuxtjs/axios'],
+  modules: ['@nuxtjs/axios', '@nuxtjs/svg'],
   axios: {
     baseURL: 'http://localhost:8000/api/web',
     // baseUrl: 'http://165.227.93.1:7000/api/web',

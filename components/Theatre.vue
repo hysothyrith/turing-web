@@ -1,5 +1,6 @@
 <template>
   <div class="wrapper">
+    <theatre-screen style="opacity: 0.9" />
     <div
       class="grid"
       :style="{ gridTemplateColumns: `repeat(${value.cols}, 1fr)` }"
@@ -66,16 +67,19 @@ export default {
 </script>
 
 <style scoped>
+.wrapper {
+  border: var(--b-width) solid var(--color-muted);
+  padding: var(--spacing-4) var(--spacing-2);
+}
+
 .grid {
   display: grid;
   justify-items: center;
   align-items: center;
   gap: 1px;
-  border: var(--b-width) solid var(--color-muted);
   border-radius: 4px;
   width: 100%;
   overflow: scroll;
-  padding: var(--spacing-4) var(--spacing-2);
 }
 
 .cell {
