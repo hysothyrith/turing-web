@@ -7,7 +7,8 @@ export const state = () => ({
   upcomingMovies: [],
   showtimes: [],
   currentMovie: null,
-  currentTheatre: null,
+  currentScreening: null,
+  tickets: [],
 })
 
 export const mutations = {
@@ -38,8 +39,11 @@ export const mutations = {
   [Mutations.SET_SHOWTIMES](state, showtimes) {
     state.showtimes = showtimes
   },
-  [Mutations.SET_CURRENT_THEATRE](state, theatre) {
-    state.currentTheatre = theatre
+  [Mutations.SET_CURRENT_SCREENING](state, screening) {
+    state.currentScreening = screening
+  },
+  [Mutations.SET_TICKETS](state, tickets) {
+    state.tickets = tickets
   },
 }
 
@@ -127,10 +131,17 @@ export const actions = {
 
     commit(Mutations.SET_SHOWTIMES, showtimes)
   },
-  async [Actions.getTheatre]({ commit }, screeningId) {
+  async [Actions.getScreening]({ commit }, screeningId) {
     const data = await this.$axios.$get(`grid/${screeningId}`)
-    const theatre = { name: data.theaterName, rows: data.row, cols: data.col }
-    theatre.grid = data.grid.map((row) => {
+    const screening = {
+      cinemaName: data.cinemaName,
+      theatre: {
+        name: data.theatreName,
+        rows: data.row,
+        cols: data.col,
+      },
+    }
+    screening.theatre.grid = data.grid.map((row) => {
       return row.map((cell) => {
         if (cell === null) return null
 
@@ -148,7 +159,25 @@ export const actions = {
         }
       })
     })
-    commit(Mutations.SET_CURRENT_THEATRE, theatre)
+    commit(Mutations.SET_CURRENT_SCREENING, screening)
+  },
+  async [Actions.purchaseTickets](_, data) {
+    await this.$axios.$post('tickets', data)
+  },
+  async [Actions.getTickets]({ commit }) {
+    const data = await this.$axios.$get('tickets')
+    const tickets = data.map((el) => {
+      return {
+        ...el,
+        movie: mapMovie(el.movie),
+        screening: {
+          ...el.screening,
+          startTime: el.screening.start_time,
+          start_time: undefined,
+        },
+      }
+    })
+    commit(Mutations.SET_TICKETS, tickets)
   },
 }
 
@@ -161,6 +190,18 @@ function mapMovies(movies) {
       genres: mapToNames(movie.genres),
     }
   })
+}
+
+function mapMovie(movie) {
+  return {
+    ...movie,
+    releaseDate: movie.releasedDate,
+    cast: mapToNames(movie.casts),
+    directors: mapToNames(movie.directors),
+    genres: mapToNames(movie.genres),
+    casts: undefined,
+    releasedDate: undefined,
+  }
 }
 
 function mapToNames(objs) {

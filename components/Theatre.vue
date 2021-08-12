@@ -9,8 +9,13 @@
           <div :key="`${i},${j}`" class="cell">
             <button
               v-if="cell"
+              v-tooltip="
+                seatIsAvailable(cell)
+                  ? `${cell.designation} | ${cell.type.name}`
+                  : 'Seat unavailable'
+              "
               class="seat"
-              :disabled="cell.booked || !cell.active"
+              :disabled="!seatIsAvailable(cell)"
               :style="{
                 borderColor: cell.type.color,
                 backgroundColor: seatIsSelected(cell)
@@ -52,6 +57,9 @@ export default {
     },
     seatIsSelected(seat) {
       return this.selectedSeats.some((el) => el.id === seat.id)
+    },
+    seatIsAvailable(seat) {
+      return !seat.booked && seat.active
     },
   },
 }

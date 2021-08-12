@@ -1,8 +1,13 @@
 <template>
   <div>
     <h1>Showtimes</h1>
-    <main class="main">
-      <div v-for="movie in showtimes" :key="movie.id" class="movie-showtimes">
+    <div v-if="status.isLoading()">Loading...</div>
+    <main v-if="status.isResolved()" class="main">
+      <div
+        v-for="movie in selectedDateShowtimes"
+        :key="movie.id"
+        class="movie-showtimes"
+      >
         <movie-poster :src="movie.poster" :movie-title="movie.title" />
         <div>
           <strong class="h5-size text-prominent"
@@ -11,12 +16,19 @@
           </strong>
 
           <div
-            v-for="screening in movie.screenings"
-            :key="screening.id"
+            v-for="showtime in movie.showtimes"
+            :key="showtime.id"
             class="screening-time__item"
           >
-            <nuxt-link to="/" class="screening-time__link">
-              {{ formatTime(screening.startTime) }}
+            <nuxt-link
+              :to="{
+                name: 'movies-id',
+                params: { id: movie.id },
+                query: { screening: showtime.id },
+              }"
+              class="screening-time__link"
+            >
+              {{ formatTime(showtime.startTime) }}
             </nuxt-link>
             <ph-caret-right :size="18" />
           </div>
@@ -28,30 +40,38 @@
 </template>
 
 <script>
-import { PhCaretRight } from 'phosphor-vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { Actions } from '~/constants'
+import AsyncStatus from '~/utils/AsyncStatus'
 
 export default {
-  components: {
-    PhCaretRight,
-  },
   data() {
     return {
+      status: new AsyncStatus(),
       selectedDate: new Date(),
+      selectedDateShowtimes: [],
     }
   },
   computed: {
     ...mapState(['showtimes']),
+    ...mapGetters(['getShowtimesOnDate']),
   },
-  mounted() {
-    this.$store.dispatch(Actions.getShowtimes)
+  async mounted() {
+    this.status.beginLoading()
+    await this.$store.dispatch(Actions.getShowtimes)
+    this.selectedDate.setDate(this.selectedDate.getDate() + 1)
+    this.setSelectedDateShowtimes()
+    this.status.resolve()
   },
   methods: {
     formatTime(time) {
       return new Date(
         `${this.selectedDate.toLocaleDateString()} ${time}`
       ).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    },
+    setSelectedDateShowtimes() {
+      const selectedDateString = this.selectedDate.toISOString().split('T')[0]
+      this.selectedDateShowtimes = this.getShowtimesOnDate(selectedDateString)
     },
   },
 }

@@ -30,15 +30,19 @@
                   ><ph-play /><spacer size="2" />Play trailer</t-button
                 >
                 <spacer size="1" axis="horizontal" />
-                <t-button @click="showBookingSummary = !showBookingSummary"
+                <t-button
+                  v-if="hasScreenings()"
+                  @click="
+                    $refs.showtimes.scrollIntoView({ behavior: 'smooth' })
+                  "
                   ><ph-ticket /><spacer size="2" />Get tickets</t-button
                 >
               </div>
             </div>
           </div>
-
           <div
-            v-if="currentMovie.screenings.length > 0"
+            v-if="hasScreenings()"
+            ref="showtimes"
             class="showtimes__wrapper"
           >
             <h2>Showtimes</h2>
@@ -46,23 +50,25 @@
               <div>
                 <label for="cinema-select">Cinema</label>
                 <t-select
-                  v-model="selectedCinema"
+                  :value="selectedCinema"
                   label="name"
                   :options="cinemasAvailable"
                   placeholder="Select a cinema"
                   class="cinema__select"
                   :clearable="false"
+                  @input="onCinemaSelect"
                 />
               </div>
               <div>
                 <label for="date-select">Date</label>
                 <t-select
-                  v-model="selectedDate"
+                  :value="selectedDate"
                   label="formatted"
                   :options="datesAvailable"
                   placeholder="Select a date"
                   :disabled="!selectedCinema"
                   :clearable="false"
+                  @input="onDateSelect"
                 />
               </div>
               <div>
@@ -74,16 +80,22 @@
                   :disabled="!selectedDate"
                   placeholder="Select a time"
                   :clearable="false"
-                  @input="onScreeningSelect"
+                  @input="onTimeSelect"
                 />
               </div>
             </div>
-            <div>
-              <div v-if="gridStatus.isLoading()">Loading grid...</div>
-              <div v-if="gridStatus.isResolved()">
-                <label class="d-block mb-2">Select seat</label>
-                <theatre :value="currentTheatre" @change="onSelectionChange" />
-              </div>
+
+            <theatre-placeholder
+              v-if="!selectedScreening"
+              :loading="theatreStatus.isLoading()"
+            />
+
+            <div v-if="selectedScreening && theatreStatus.isResolved()">
+              <label class="d-block mb-2">Select seats</label>
+              <theatre
+                :value="currentScreening.theatre"
+                @change="onSelectionChange"
+              />
             </div>
           </div>
           <div
@@ -95,12 +107,18 @@
             <div class="booking-summary__inner">
               <div class="booking-summary">
                 <strong>Booking summary</strong>
-                <div>Seats {{ selectionSummary }}</div>
+                <div>
+                  {{ pluralizeIfNeeded('Seat', selectedSeats.length) }}
+                  {{ selectionSummary }}
+                </div>
                 <strong>$ {{ selectionPrice }}</strong>
               </div>
               <t-button @click="onBookClick"
                 ><ph-ticket /><spacer size="2" />Book
-                {{ selectedSeats.length }} tickets</t-button
+                {{ selectedSeats.length }}
+                {{
+                  pluralizeIfNeeded('ticket', selectedSeats.length)
+                }}</t-button
               >
             </div>
           </div>
@@ -115,13 +133,16 @@
 import { mapState } from 'vuex'
 import AsyncStatus from '~/utils/AsyncStatus'
 import { Actions } from '~/constants'
+import { formatDate, formatTime } from '~/utils/dateTools'
+import pluralizeIfNeeded from '~/mixins/pluralizeIfNeeded'
 
 export default {
+  mixins: [pluralizeIfNeeded],
   layout: 'full',
   data() {
     return {
       status: new AsyncStatus(),
-      gridStatus: new AsyncStatus(),
+      theatreStatus: new AsyncStatus(),
       movie: null,
       theatre: null,
       showBookingSummary: false,
@@ -132,7 +153,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['currentMovie', 'currentTheatre']),
+    ...mapState(['currentMovie', 'currentScreening']),
     cinemasAvailable() {
       return this.currentMovie.screenings.map((screening) => screening.cinema)
     },
@@ -143,7 +164,7 @@ export default {
       )
       if (!screening) return []
       return Object.keys(screening.dates).map((key) => {
-        return { key, formatted: new Date(key).toLocaleDateString() }
+        return { key, formatted: formatDate(key) }
       })
     },
     timesAvailable() {
@@ -157,7 +178,7 @@ export default {
       if (!screeningDates) return []
 
       return screeningDates.map((screening) => {
-        return { id: screening.id, startTime: screening.start_time }
+        return { id: screening.id, startTime: formatTime(screening.start_time) }
       })
     },
     selectionSummary() {
@@ -182,16 +203,28 @@ export default {
     playTrailer() {
       this.$modal.show('trailer-player')
     },
-    onScreeningSelect(screening) {
+    onCinemaSelect(cinema) {
+      this.selectedCinema = cinema
+      this.selectedDate = null
+      this.selectedScreening = null
+      this.selectedSeats = []
+    },
+    onDateSelect(date) {
+      this.selectedDate = date
+      this.selectedScreening = null
+      this.selectedSeats = []
+    },
+    onTimeSelect(screening) {
+      this.selectedSeats = []
       this.selectedScreening = screening
-      this.gridStatus.beginLoading()
+      this.theatreStatus.beginLoading(400)
       this.$store
-        .dispatch(Actions.getTheatre, screening.id)
+        .dispatch(Actions.getScreening, screening.id)
         .then(() => {
-          this.gridStatus.resolve()
+          this.theatreStatus.resolve()
         })
         .catch((err) => {
-          this.gridStatus.reject()
+          this.theatreStatus.reject()
           alert(err)
         })
     },
@@ -207,6 +240,9 @@ export default {
           seats: this.selectedSeats.map((seat) => seat.id),
         },
       })
+    },
+    hasScreenings() {
+      return this.currentMovie.screenings.length > 0
     },
   },
 }
@@ -251,6 +287,7 @@ label {
   border-top: 1px solid var(--color-muted);
   margin-top: var(--spacing-8);
   padding-top: var(--spacing-4);
+  min-height: 50rem;
 }
 
 .showtime__selects {
@@ -311,7 +348,6 @@ label {
 
   .showtime__selects {
     grid-template-columns: 1fr 1fr 1fr;
-    gap: var(--spacing-1);
   }
 }
 </style>

@@ -18,12 +18,13 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [],
+  css: ['@/assets/css/v-tooltip.css'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '~plugins/vue-js-modal.js',
     '~plugins/phosphor-vue.js',
+    '~plugins/v-tooltip.js',
     { src: '~plugins/epic-spinners.js', mode: 'client' },
   ],
 
@@ -43,6 +44,7 @@ export default {
   modules: ['@nuxtjs/axios'],
   axios: {
     baseURL: 'http://localhost:8000/api/web',
+    // baseUrl: 'http://165.227.93.1:7000/api/web',
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
