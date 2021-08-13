@@ -24,8 +24,22 @@
                 <movie-rating v-if="currentMovie.rating">{{
                   currentMovie.rating
                 }}</movie-rating>
-                <p style="margin-bottom: 0">{{ currentMovie.synopsis }}</p>
-                <spacer size="1" axis="vertical" />
+                <p class="mb-4">{{ currentMovie.synopsis }}</p>
+                <div class="movie__cast-crew">
+                  <div>
+                    <strong class="d-block text-prominent">{{
+                      pluralizeIfNeeded(
+                        currentMovie.directors.length,
+                        'Director'
+                      )
+                    }}</strong>
+                    {{ currentMovie.directors.join(', ') }}
+                  </div>
+                  <div>
+                    <strong class="d-block text-prominent">Cast</strong>
+                    {{ currentMovie.cast.join(', ') }}
+                  </div>
+                </div>
                 <div class="actions">
                   <t-button @click="playTrailer"
                     ><ph-play /><spacer size="2" />Play trailer</t-button
@@ -109,7 +123,7 @@
                 <div class="booking-summary">
                   <strong>Booking summary</strong>
                   <div>
-                    {{ pluralizeIfNeeded('Seat', selectedSeats.length) }}
+                    {{ pluralizeIfNeeded(selectedSeats.length, 'Seat') }}
                     {{ selectionSummary }}
                   </div>
                   <strong>$ {{ selectionPrice }}</strong>
@@ -118,7 +132,7 @@
                   ><ph-ticket /><spacer size="2" />Book
                   {{ selectedSeats.length }}
                   {{
-                    pluralizeIfNeeded('ticket', selectedSeats.length)
+                    pluralizeIfNeeded(selectedSeats.length, 'ticket')
                   }}</t-button
                 >
               </div>
@@ -281,7 +295,12 @@ label {
   display: grid;
   gap: var(--spacing-4);
   grid-template-columns: 1fr 1.5fr;
-  align-items: center;
+}
+
+.movie__cast-crew {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: var(--spacing-8);
 }
 
 .info {
