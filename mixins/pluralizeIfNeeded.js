@@ -1,7 +1,7 @@
 export default {
   methods: {
-    pluralizeIfNeeded(text, count) {
-      return count > 1 ? text + 's' : text
+    pluralizeIfNeeded(count, noun, suffix = 's') {
+      return count === 1 ? noun : noun + suffix
     },
   },
 }
