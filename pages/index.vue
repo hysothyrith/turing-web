@@ -33,9 +33,6 @@ export default Vue.extend({
       status: new AsyncStatus(),
     }
   },
-  head: {
-    title: 'Turing Cinemas',
-  },
   computed: {
     ...mapState(['nowScreeningMovies', 'upcomingMovies']),
   },

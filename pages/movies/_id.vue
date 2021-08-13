@@ -85,11 +85,6 @@
               </div>
             </div>
 
-            <theatre-placeholder
-              v-if="!selectedScreening"
-              :loading="theatreStatus.isLoading()"
-            />
-
             <div v-if="selectedScreening && theatreStatus.isResolved()">
               <label class="d-block mb-2">Select seats</label>
               <theatre
@@ -97,6 +92,7 @@
                 @change="onSelectionChange"
               />
             </div>
+            <theatre-placeholder v-else :loading="theatreStatus.isLoading()" />
           </div>
           <div
             :class="[

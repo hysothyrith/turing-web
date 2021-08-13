@@ -12,7 +12,13 @@
           :size="24"
           color="black" /></client-only
     ></span>
-    <span class="slot__wrapper">
+    <span
+      :class="[
+        'slot__wrapper',
+        { 'slot__wrapper--primary': color === 'primary' },
+        { 'slot__wrapper--prominent': color === 'prominent' },
+      ]"
+    >
       <slot />
     </span>
   </button>
@@ -32,6 +38,10 @@ export default {
     variant: {
       type: String,
       default: 'regular',
+    },
+    color: {
+      type: String,
+      default: 'prominent',
     },
   },
 }
@@ -63,7 +73,6 @@ export default {
 
 .button.text {
   background-color: transparent;
-  color: var(--color-prominent);
   border: none;
   padding: 0;
 }
@@ -76,6 +85,18 @@ export default {
 
 .loading .slot__wrapper {
   visibility: hidden;
+}
+
+.button.text .slot__wrapper--primary {
+  color: var(--color-primary);
+}
+
+.button.text:hover .slot__wrapper--primary {
+  color: var(--color-prominent);
+}
+
+.button.text .slot__wrapper--prominent {
+  color: var(--color-prominent);
 }
 
 .spinner__wrapper {
