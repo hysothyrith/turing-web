@@ -1,7 +1,7 @@
 <template>
   <div>
-    <loading-box v-if="status.isLoading()" />
     <fade-transition>
+      <loading-box v-if="status.isLoading()" />
       <div v-if="status.isResolved()">
         <movie-backdrop
           class="backdrop"

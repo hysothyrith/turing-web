@@ -1,7 +1,7 @@
 <template>
   <div>
-    <loading-box v-if="status.isLoading()" />
     <fade-transition>
+      <loading-box v-if="status.isLoading()" />
       <main v-if="status.isResolved()">
         <div class="header">
           <div>

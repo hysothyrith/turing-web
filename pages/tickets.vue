@@ -1,8 +1,8 @@
 <template>
   <div>
     <h1>Tickets</h1>
-    <loading-box v-if="status.isLoading()" />
     <fade-transition>
+      <loading-box v-if="status.isLoading()" />
       <div v-if="status.isResolved()">
         <div v-if="!objIsEmpty(summary.newScreenings)">
           <h2>Upcoming screenings</h2>
