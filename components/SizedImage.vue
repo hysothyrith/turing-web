@@ -1,6 +1,6 @@
 <template>
   <img
-    :src="`http://localhost:8000/uploads/images/${size}${src}`"
+    :src="`${$config.BASE_URL}/uploads/images/${size}${src}`"
     :alt="alt"
     @load="$emit('load')"
   />

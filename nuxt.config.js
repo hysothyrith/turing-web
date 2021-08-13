@@ -4,7 +4,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'turing-web',
+    title: 'Turing Cinemas',
     htmlAttrs: {
       lang: 'en',
     },
@@ -18,7 +18,7 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: ['@/assets/css/v-tooltip.css'],
+  css: ['@/assets/css/utils.css', '@/assets/css/v-tooltip.css'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
@@ -59,4 +59,8 @@ export default {
   },
 
   ssr: false,
+
+  publicRuntimeConfig: {
+    BASE_URL: 'http://localhost:8000',
+  },
 }
