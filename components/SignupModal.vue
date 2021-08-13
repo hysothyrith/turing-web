@@ -2,7 +2,7 @@
   <modal name="signup" :adaptive="true" height="auto" :width="900">
     <div class="wrapper">
       <div class="wrapper__inner">
-        <div class="cover__wrapper">
+        <div>
           <img
             class="img--cover cover"
             src="https://images.unsplash.com/photo-1614014783958-369b9429da66?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
@@ -99,10 +99,6 @@ export default {
   padding: 64px var(--spacing-side);
   display: flex;
   align-items: center;
-}
-
-.cover__wrapper {
-  max-height: 550px;
 }
 
 .form {
