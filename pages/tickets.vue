@@ -1,45 +1,43 @@
 <template>
   <div>
-    <h1>Ticket</h1>
-    <div v-if="status.isResolved()">
-      <div v-if="!objIsEmpty(summary.newScreenings)">
-        <h2>Upcoming screenings</h2>
-        <ul class="ticket__list">
-          <li
-            v-for="(screening, screeningId) in summary.newScreenings"
-            :key="screeningId"
-            class="ticket__item"
-          >
-            <movie-poster
-              :src="screening.movie.poster"
-              :movie-title="screening.movie.title"
-            />
-            <div>
-              <tickets-summary
-                :movie="screening.movie"
-                :cinema-name="screening.cinema.name"
-                :theatre-name="screening.details.theatre"
-                :seat-names="screening.tickets.map((el) => el.seat).join(', ')"
-                :date-string="screening.details.date"
-                :time-string="screening.details.startTime"
+    <h1>Tickets</h1>
+    <loading-box v-if="status.isLoading()" />
+    <fade-transition>
+      <div v-if="status.isResolved()">
+        <div v-if="!objIsEmpty(summary.newScreenings)">
+          <h2>Upcoming screenings</h2>
+          <ul class="ticket__list">
+            <li
+              v-for="(screening, screeningId) in summary.newScreenings"
+              :key="screeningId"
+              class="ticket__item"
+            >
+              <movie-poster
+                :src="screening.movie.poster"
+                :movie-title="screening.movie.title"
               />
-            </div>
-          </li>
-        </ul>
+              <div>
+                <tickets-summary
+                  :movie="screening.movie"
+                  :cinema-name="screening.cinema.name"
+                  :theatre-name="screening.details.theatre"
+                  :seat-names="
+                    screening.tickets.map((el) => el.seat).join(', ')
+                  "
+                  :date-string="screening.details.date"
+                  :time-string="screening.details.startTime"
+                />
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div v-if="!objIsEmpty(summary.pastScreenings)">
+          <h2>Past tickets</h2>
+          <ul class="ticket__list"></ul>
+        </div>
+        <div v-if="noTickets">You don’t have any tickets yet.</div>
       </div>
-      <div v-if="!objIsEmpty(summary.pastScreenings)">
-        <h2>Past tickets</h2>
-        <ul class="ticket__list"></ul>
-      </div>
-      <div
-        v-if="
-          objIsEmpty(summary.newScreenings) &&
-          objIsEmpty(summary.pastScreenings)
-        "
-      >
-        You don’t have any tickets yet.
-      </div>
-    </div>
+    </fade-transition>
   </div>
 </template>
 
@@ -96,9 +94,12 @@ export default {
   },
   mounted() {
     this.status.beginLoading()
-    this.$store.dispatch(Actions.getTickets).then(() => {
-      this.status.resolve()
-    })
+    this.$store
+      .dispatch(Actions.getTickets)
+      .then(() => {
+        this.status.resolve()
+      })
+      .catch((err) => alert(err))
   },
   methods: {
     logout() {
@@ -107,6 +108,12 @@ export default {
     },
     objIsEmpty(obj) {
       return Object.keys(obj).length === 0
+    },
+    noTickets() {
+      return (
+        this.objIsEmpty(this.summary.newScreenings) &&
+        this.objIsEmpty(this.summary.pastScreenings)
+      )
     },
   },
 }

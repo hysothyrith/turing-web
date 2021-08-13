@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50px" height="50px" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.2 (67145) - http://www.bohemiancoding.com/sketch -->
+    <title>film</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="film">
+            <g id="sides" transform="translate(4.000000, 4.000000)" fill="#FFFFFF" stroke="#FFFFFF">
+                <rect id="Rectangle" x="0.9" y="0.8" width="6.2" height="6.2" rx="1"></rect>
+                <rect id="Rectangle-Copy-4" x="34.9" y="0.8" width="6.2" height="6.2" rx="1"></rect>
+                <rect id="Rectangle-Copy" x="0.9" y="12.2" width="6.2" height="6.2" rx="1"></rect>
+                <rect id="Rectangle-Copy-5" x="34.9" y="12.2" width="6.2" height="6.2" rx="1"></rect>
+                <rect id="Rectangle-Copy-2" x="0.9" y="23.6" width="6.2" height="6.2" rx="1"></rect>
+                <rect id="Rectangle-Copy-6" x="34.9" y="23.6" width="6.2" height="6.2" rx="1"></rect>
+                <rect id="Rectangle-Copy-3" x="0.9" y="35" width="6.2" height="6.2" rx="1"></rect>
+                <rect id="Rectangle-Copy-7" x="34.9" y="35" width="6.2" height="6.2" rx="1"></rect>
+            </g>
+            <g id="centre" transform="translate(14.000000, 0.000000)" fill="#FFFFFF">
+                <path d="M1,0 L22,0 L22,13 C22,13.5522847 21.5522847,14 21,14 L1,14 C0.44771525,14 6.76353751e-17,13.5522847 0,13 L0,1 C-6.76353751e-17,0.44771525 0.44771525,1.01453063e-16 1,0 Z" id="Rectangle"></path>
+                <rect id="Rectangle-Copy-8" x="0" y="18" width="22" height="14" rx="1"></rect>
+                <path d="M1,36 L21,36 C21.5522847,36 22,36.4477153 22,37 L22,50 L0,50 L0,37 C-6.76353751e-17,36.4477153 0.44771525,36 1,36 Z" id="Rectangle-Copy-9"></path>
+            </g>
+            <rect id="container" stroke="#FFFFFF" stroke-width="2" x="1" y="1" width="48" height="48" rx="5"></rect>
+        </g>
+    </g>
+</svg>

@@ -1,87 +1,89 @@
 <template>
   <div>
-    <div v-if="status.isLoading()">Loading...</div>
-    <main v-if="status.isResolved()">
-      <div class="header">
-        <div>
-          <movie-poster
-            :src="currentMovie.poster"
-            :movie-title="currentMovie.title"
+    <loading-box v-if="status.isLoading()" />
+    <fade-transition>
+      <main v-if="status.isResolved()">
+        <div class="header">
+          <div>
+            <movie-poster
+              :src="currentMovie.poster"
+              :movie-title="currentMovie.title"
+            />
+          </div>
+          <tickets-summary
+            :movie="currentMovie"
+            :cinema-name="currentScreening.cinemaName"
+            :theatre-name="currentScreening.theatre.name"
+            :seat-names="selectedSeats.map((el) => el.designation).join(', ')"
+            :date-string="currentScreeningInfo.date"
+            :time-string="currentScreeningInfo.startTime"
           />
         </div>
-        <tickets-summary
-          :movie="currentMovie"
-          :cinema-name="currentScreening.cinemaName"
-          :theatre-name="currentScreening.theatre.name"
-          :seat-names="selectedSeats.map((el) => el.designation).join(', ')"
-          :date-string="currentScreeningInfo.date"
-          :time-string="currentScreeningInfo.startTime"
-        />
-      </div>
-      <div class="payment__form-wrapper">
-        <div>
-          <h2>Payment details</h2>
-          <form class="payment__form" @submit.prevent="onSubmit">
-            <div class="payment__fields-wrapper mb-4">
-              <div class="input-group">
-                <label for="cardholder-name">Cardholder name</label>
-                <input id="cardholder-name" type="text" />
-              </div>
-              <div class="input-group">
-                <label for="card-number">Card number</label>
-                <input id="card-number" type="text" />
-              </div>
-              <div class="input-group">
-                <label for="cvv">CVV</label>
-                <input id="cvv" type="text" placeholder="123" />
-              </div>
-              <div class="input-group">
-                <label for="expiration">Expiration</label>
-                <input id="expiration" type="text" />
-              </div>
-            </div>
-            <div class="mb-4">
-              <h2>Purchase summary</h2>
-              <ul class="seats__list">
-                <li
-                  v-for="(seats, type) in groupedSelectedSeats"
-                  :key="type"
-                  class="mb-3"
-                >
-                  <div class="d-flex justify-content-between">
-                    <strong class="text-prominent">{{ type }}</strong>
-                    ${{
-                      seats.reduce((acc, el) => acc + el.price, 0).toFixed(2)
-                    }}
-                  </div>
-                  <div>
-                    {{ seats.length > 1 ? 'Seats' : 'Seat' }}
-                    {{ seats.map((el) => el.designation).join(', ') }}
-                  </div>
-                </li>
-              </ul>
-              <div class="d-flex justify-content-end">
-                <div>
-                  <strong class="d-block text-prominent text-right"
-                    >Total</strong
-                  >
-                  <span class="h5-size text-right"
-                    >${{
-                      selectedSeats
-                        .reduce((acc, el) => acc + el.price, 0)
-                        .toFixed(2)
-                    }}</span
-                  >
+        <div class="payment__form-wrapper">
+          <div>
+            <h2>Payment details</h2>
+            <form class="payment__form" @submit.prevent="onSubmit">
+              <div class="payment__fields-wrapper mb-4">
+                <div class="input-group">
+                  <label for="cardholder-name">Cardholder name</label>
+                  <input id="cardholder-name" type="text" />
+                </div>
+                <div class="input-group">
+                  <label for="card-number">Card number</label>
+                  <input id="card-number" type="text" />
+                </div>
+                <div class="input-group">
+                  <label for="cvv">CVV</label>
+                  <input id="cvv" type="text" placeholder="123" />
+                </div>
+                <div class="input-group">
+                  <label for="expiration">Expiration</label>
+                  <input id="expiration" type="text" />
                 </div>
               </div>
-            </div>
-            <t-button type="submit" :loading="purchaseStatus.isLoading()"
-              ><ph-check class="mr-2" />Confirm</t-button
-            >
-          </form>
+              <div class="mb-4">
+                <h2>Purchase summary</h2>
+                <ul class="seats__list">
+                  <li
+                    v-for="(seats, type) in groupedSelectedSeats"
+                    :key="type"
+                    class="mb-3"
+                  >
+                    <div class="d-flex justify-content-between">
+                      <strong class="text-prominent">{{ type }}</strong>
+                      ${{
+                        seats.reduce((acc, el) => acc + el.price, 0).toFixed(2)
+                      }}
+                    </div>
+                    <div>
+                      {{ seats.length > 1 ? 'Seats' : 'Seat' }}
+                      {{ seats.map((el) => el.designation).join(', ') }}
+                    </div>
+                  </li>
+                </ul>
+                <div class="d-flex justify-content-end">
+                  <div>
+                    <strong class="d-block text-prominent text-right"
+                      >Total</strong
+                    >
+                    <span class="h5-size text-right"
+                      >${{
+                        selectedSeats
+                          .reduce((acc, el) => acc + el.price, 0)
+                          .toFixed(2)
+                      }}</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <t-button type="submit" :loading="purchaseStatus.isLoading()"
+                ><ph-check class="mr-2" />Confirm</t-button
+              >
+            </form>
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </fade-transition>
   </div>
 </template>
 
@@ -102,7 +104,7 @@ export default {
     ...mapState(['currentMovie', 'currentScreening']),
     selectedSeats() {
       const { grid } = this.currentScreening.theatre
-      const seatIds = this.$route.query.seats.map((id) => parseInt(id))
+      const seatIds = [...this.$route.query.seats].map((id) => parseInt(id))
       const seats = []
       grid.forEach((row) => {
         row.forEach((cell) => {

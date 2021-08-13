@@ -1,127 +1,133 @@
 <template>
   <div>
-    <div v-if="status.isLoading()">Loading...</div>
-    <div v-if="status.isResolved()">
-      <movie-backdrop
-        class="backdrop"
-        :movie-title="currentMovie.title"
-        :src="currentMovie.backdrop"
-      />
-      <div class="main__wrapper">
-        <main class="main">
-          <div class="movie">
-            <div>
-              <movie-poster
-                :src="currentMovie.poster"
-                :movie-title="currentMovie.title"
-              />
-            </div>
-            <div class="info">
-              <h1 class="mb-1">{{ currentMovie.title }}</h1>
-              <movie-genres :genres="currentMovie.genres" />
-              <spacer size="2" axis="horizontal" />
-              <movie-rating v-if="currentMovie.rating">{{
-                currentMovie.rating
-              }}</movie-rating>
-              <p style="margin-bottom: 0">{{ currentMovie.synopsis }}</p>
-              <spacer size="1" axis="vertical" />
-              <div class="actions">
-                <t-button @click="playTrailer"
-                  ><ph-play /><spacer size="2" />Play trailer</t-button
-                >
-                <spacer size="1" axis="horizontal" />
-                <t-button
-                  v-if="hasScreenings()"
-                  @click="
-                    $refs.showtimes.scrollIntoView({ behavior: 'smooth' })
-                  "
-                  ><ph-ticket /><spacer size="2" />Get tickets</t-button
-                >
-              </div>
-            </div>
-          </div>
-          <div
-            v-if="hasScreenings()"
-            ref="showtimes"
-            class="showtimes__wrapper"
-          >
-            <h2>Showtimes</h2>
-            <div class="showtime__selects mb-6">
+    <loading-box v-if="status.isLoading()" />
+    <fade-transition>
+      <div v-if="status.isResolved()">
+        <movie-backdrop
+          class="backdrop"
+          :movie-title="currentMovie.title"
+          :src="currentMovie.backdrop"
+        />
+        <div class="main__wrapper">
+          <main class="main">
+            <div class="movie">
               <div>
-                <label for="cinema-select">Cinema</label>
-                <t-select
-                  :value="selectedCinema"
-                  label="name"
-                  :options="cinemasAvailable"
-                  placeholder="Select a cinema"
-                  class="cinema__select"
-                  :clearable="false"
-                  @input="onCinemaSelect"
+                <movie-poster
+                  :src="currentMovie.poster"
+                  :movie-title="currentMovie.title"
                 />
               </div>
-              <div>
-                <label for="date-select">Date</label>
-                <t-select
-                  :value="selectedDate"
-                  label="formatted"
-                  :options="datesAvailable"
-                  placeholder="Select a date"
-                  :disabled="!selectedCinema"
-                  :clearable="false"
-                  @input="onDateSelect"
-                />
-              </div>
-              <div>
-                <label for="time-select">Time</label>
-                <t-select
-                  :value="selectedScreening"
-                  label="startTime"
-                  :options="timesAvailable"
-                  :disabled="!selectedDate"
-                  placeholder="Select a time"
-                  :clearable="false"
-                  @input="onTimeSelect"
-                />
-              </div>
-            </div>
-
-            <div v-if="selectedScreening && theatreStatus.isResolved()">
-              <label class="d-block mb-2">Select seats</label>
-              <theatre
-                :value="currentScreening.theatre"
-                @change="onSelectionChange"
-              />
-            </div>
-            <theatre-placeholder v-else :loading="theatreStatus.isLoading()" />
-          </div>
-          <div
-            :class="[
-              'booking-summary__wrapper',
-              { show: selectedSeats.length > 0 },
-            ]"
-          >
-            <div class="booking-summary__inner">
-              <div class="booking-summary">
-                <strong>Booking summary</strong>
-                <div>
-                  {{ pluralizeIfNeeded('Seat', selectedSeats.length) }}
-                  {{ selectionSummary }}
+              <div class="info">
+                <h1 class="mb-1">{{ currentMovie.title }}</h1>
+                <movie-genres :genres="currentMovie.genres" />
+                <spacer size="2" axis="horizontal" />
+                <movie-rating v-if="currentMovie.rating">{{
+                  currentMovie.rating
+                }}</movie-rating>
+                <p style="margin-bottom: 0">{{ currentMovie.synopsis }}</p>
+                <spacer size="1" axis="vertical" />
+                <div class="actions">
+                  <t-button @click="playTrailer"
+                    ><ph-play /><spacer size="2" />Play trailer</t-button
+                  >
+                  <spacer size="1" axis="horizontal" />
+                  <t-button
+                    v-if="hasScreenings()"
+                    @click="
+                      $refs.showtimes.scrollIntoView({ behavior: 'smooth' })
+                    "
+                    ><ph-ticket /><spacer size="2" />Get tickets</t-button
+                  >
                 </div>
-                <strong>$ {{ selectionPrice }}</strong>
               </div>
-              <t-button @click="onBookClick"
-                ><ph-ticket /><spacer size="2" />Book
-                {{ selectedSeats.length }}
-                {{
-                  pluralizeIfNeeded('ticket', selectedSeats.length)
-                }}</t-button
-              >
             </div>
-          </div>
-        </main>
+            <div
+              v-if="hasScreenings()"
+              ref="showtimes"
+              class="showtimes__wrapper"
+            >
+              <h2>Showtimes</h2>
+              <div class="showtime__selects mb-6">
+                <div>
+                  <label for="cinema-select">Cinema</label>
+                  <t-select
+                    :value="selectedCinema"
+                    label="name"
+                    :options="cinemasAvailable"
+                    placeholder="Select a cinema"
+                    class="cinema__select"
+                    :clearable="false"
+                    @input="onCinemaSelect"
+                  />
+                </div>
+                <div>
+                  <label for="date-select">Date</label>
+                  <t-select
+                    :value="selectedDate"
+                    label="formatted"
+                    :options="datesAvailable"
+                    placeholder="Select a date"
+                    :disabled="!selectedCinema"
+                    :clearable="false"
+                    @input="onDateSelect"
+                  />
+                </div>
+                <div>
+                  <label for="time-select">Time</label>
+                  <t-select
+                    :value="selectedScreening"
+                    label="startTime"
+                    :options="timesAvailable"
+                    :disabled="!selectedDate"
+                    placeholder="Select a time"
+                    :clearable="false"
+                    @input="onTimeSelect"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label class="d-block mb-2">Select seats</label>
+                <theatre
+                  v-if="selectedScreening && theatreStatus.isResolved()"
+                  :value="currentScreening.theatre"
+                  @change="onSelectionChange"
+                />
+                <theatre-placeholder
+                  v-else
+                  :loading="theatreStatus.isLoading()"
+                />
+              </div>
+            </div>
+            <div
+              :class="[
+                'booking-summary__wrapper',
+                { show: selectedSeats.length > 0 },
+              ]"
+            >
+              <div class="booking-summary__inner">
+                <div class="booking-summary">
+                  <strong>Booking summary</strong>
+                  <div>
+                    {{ pluralizeIfNeeded('Seat', selectedSeats.length) }}
+                    {{ selectionSummary }}
+                  </div>
+                  <strong>$ {{ selectionPrice }}</strong>
+                </div>
+                <t-button @click="onBookClick"
+                  ><ph-ticket /><spacer size="2" />Book
+                  {{ selectedSeats.length }}
+                  {{
+                    pluralizeIfNeeded('ticket', selectedSeats.length)
+                  }}</t-button
+                >
+              </div>
+            </div>
+          </main>
+        </div>
+        <trailer-player :src="currentMovie.trailer" />
       </div>
-      <trailer-player :src="currentMovie.trailer" />
-    </div>
+    </fade-transition>
   </div>
 </template>
 
