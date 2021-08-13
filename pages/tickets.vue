@@ -91,6 +91,12 @@ export default {
 
       return summary
     },
+    noTickets() {
+      return (
+        this.objIsEmpty(this.summary.newScreenings) &&
+        this.objIsEmpty(this.summary.pastScreenings)
+      )
+    },
   },
   mounted() {
     this.status.beginLoading()
@@ -108,12 +114,6 @@ export default {
     },
     objIsEmpty(obj) {
       return Object.keys(obj).length === 0
-    },
-    noTickets() {
-      return (
-        this.objIsEmpty(this.summary.newScreenings) &&
-        this.objIsEmpty(this.summary.pastScreenings)
-      )
     },
   },
 }
