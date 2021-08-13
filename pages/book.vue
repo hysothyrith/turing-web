@@ -174,7 +174,7 @@ export default {
         })
         .then(() => {
           this.purchaseStatus.resolve()
-          this.$router.push('/account')
+          this.$router.push('/tickets')
         })
         .catch((err) => alert(err))
     },

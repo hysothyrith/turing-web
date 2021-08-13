@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Account</h1>
+    <h1>Ticket</h1>
     <div v-if="status.isResolved()">
       <div v-if="!objIsEmpty(summary.newScreenings)">
         <h2>Upcoming screenings</h2>
@@ -39,11 +39,7 @@
       >
         You don’t have any tickets yet.
       </div>
-      <!-- <pre>
-      {{ tickets }}
-      </pre> -->
     </div>
-    <t-button @click="logout"><ph-sign-out class="mr-2" />Logout</t-button>
   </div>
 </template>
 
