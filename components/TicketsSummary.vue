@@ -1,6 +1,6 @@
 <template>
   <div class="summary">
-    <h2 class="mb-2">{{ movie.title }}</h2>
+    <h2 class="mb-2 h3-size">{{ movie.title }}</h2>
     <div>
       <movie-genres :genres="movie.genres" class="mr-2" />
       <movie-rating class="mr-2">{{ movie.rating }}</movie-rating>
@@ -21,14 +21,15 @@
       </div>
       <div>
         <strong class="d-block text-prominent">Date</strong>
-        {{ formattedDateAndTime }}
+        <span class="nowrap">{{ formattedDate }}</span> at
+        <span class="nowrap">{{ formattedTime }}</span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { formatDateAndTime } from '~/utils/dateTools'
+import { formatDate, formatTime } from '~/utils/dateTools'
 
 export default {
   props: {
@@ -58,8 +59,11 @@ export default {
     },
   },
   computed: {
-    formattedDateAndTime() {
-      return formatDateAndTime(this.dateString, this.timeString)
+    formattedDate() {
+      return formatDate(this.dateString)
+    },
+    formattedTime() {
+      return formatTime(this.timeString)
     },
   },
 }
@@ -69,6 +73,13 @@ export default {
 .summary__grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-4);
+  gap: var(--spacing-2);
+}
+
+@media only screen and (min-width: 768px) {
+  .summary__grid {
+    grid-template-columns: 1fr 2fr;
+    gap: var(--spacing-4);
+  }
 }
 </style>
