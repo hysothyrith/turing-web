@@ -1,60 +1,40 @@
 <template>
-  <nav role="navigation">
-    <ul class="link__list">
+  <nav role="navigation" class="nav">
+    <ul class="nav__inner">
       <li class="flex-grow-1">
-        <nuxt-link to="/" class="nav__brand">Turing Cinemas</nuxt-link>
+        <nuxt-link to="/" class="nav__brand">Turing&nbsp;Cinemas</nuxt-link>
       </li>
-      <li>
-        <nuxt-link to="/showtimes" class="nav__item">Showtimes</nuxt-link>
-      </li>
-      <li>
-        <nuxt-link to="/cinemas" class="nav__item">Cinemas</nuxt-link>
-      </li>
-      <li>
-        <nuxt-link to="/concession" class="nav__item">Concession</nuxt-link>
-      </li>
-      <li v-if="isAuthenticated" class="p-relative">
-        <t-button
-          variant="text"
-          class="nav__item"
-          @click.stop="showDropdown = !showDropdown"
-          ><span class="d-inline-flex align-items-center"
-            >Account
-            <ph-caret-down
-              :class="['caret', { flip: showDropdown }]"
-              :size="20" /></span
-        ></t-button>
-        <ul :class="['dropdown', { show: showDropdown }]">
-          <li>
-            <nuxt-link to="/tickets" class="nav__item">Tickets</nuxt-link>
+      <li class="nav__items-main-container">
+        <ul class="nav__items-main-list">
+          <li class="nav__item">
+            <nuxt-link to="/showtimes">Showtimes</nuxt-link>
           </li>
-          <li>
-            <nuxt-link to="/profile" class="nav__item">Profile</nuxt-link>
+          <li class="nav__item">
+            <nuxt-link to="/cinemas">Cinemas</nuxt-link>
           </li>
-          <li>
-            <span
-              ><t-button
+          <li class="nav__item">
+            <nuxt-link to="/concession">Concession</nuxt-link>
+          </li>
+          <template v-if="isAuthenticated">
+            <li class="nav__item">
+              <nuxt-link to="/tickets">Tickets</nuxt-link>
+            </li>
+            <li class="nav__item">
+              <nuxt-link to="/account">Account</nuxt-link>
+            </li>
+          </template>
+          <template v-else>
+            <li class="nav__item">
+              <t-button
                 variant="text"
-                color="primary"
-                class="nav__item"
-                @click="onLogoutClick"
-                >Log out</t-button
-              ></span
-            >
-          </li>
+                color="prominent"
+                @click="$modal.show('login')"
+                >Log&nbsp;in</t-button
+              >
+            </li>
+          </template>
         </ul>
       </li>
-      <template v-else>
-        <li>
-          <t-button
-            variant="text"
-            color="prominent"
-            class="nav__item"
-            @click="$modal.show('login')"
-            >Log in</t-button
-          >
-        </li>
-      </template>
     </ul>
     <div class="background" :style="{ opacity: backgroundOpacity }"></div>
   </nav>
@@ -71,7 +51,9 @@ export default {
       showDropdown: false,
     }
   },
-  computed: mapGetters(['isAuthenticated']),
+  computed: {
+    ...mapGetters(['isAuthenticated']),
+  },
   mounted() {
     window.addEventListener('scroll', this.updateBackgroundOpacity)
     document.body.addEventListener('click', this.onClickOutside)
@@ -89,18 +71,25 @@ export default {
     },
     onLogoutClick() {
       this.$store.commit(Mutations.CLEAR_AUTH_DATA)
+      this.$toast.info('Logged out successfully.')
+      const routeIsProtected = this.currentRouteMeta.some(
+        (meta) => meta.auth && meta.auth.protected
+      )
+      if (routeIsProtected) {
+        this.$router.push('/')
+      }
     },
   },
 }
 </script>
 
 <style scoped>
-nav {
+.nav {
+  position: relative;
   display: flex;
   z-index: 2;
   width: 100%;
-  position: relative;
-  height: 2.6rem;
+  padding: 0 var(--spacing-side);
 }
 
 .nav__brand {
@@ -108,78 +97,75 @@ nav {
   color: var(--color-prominent);
   font-weight: 600;
   font-size: 0.9rem;
+  margin-right: var(--spacing-4);
 }
 
-.link__list {
-  list-style: none;
+.nav__inner {
   display: flex;
   width: 100%;
+  list-style: none;
   padding: 0;
-  margin: var(--spacing-1) var(--spacing-side);
   z-index: 2;
-}
-
-.link__list li {
-  display: flex;
+  margin: 0;
   align-items: center;
+  min-height: 2.6rem;
 }
 
-.nav__item {
+.nav__items-main-container {
+  display: flex;
+  flex-wrap: nowrap;
+  padding: 0 var(--spacing-4);
+
+  /* Enables horizontal scrolling */
+  overflow-x: scroll;
+  white-space: nowrap;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 20px,
+    black 90%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 20px,
+    black 90%,
+    transparent
+  );
+}
+
+.nav__items-main-list {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  position: relative;
+}
+
+.nav__item * {
   color: var(--color-primary);
   margin-left: var(--spacing-4);
+  flex: 0 0 auto;
   font-size: 0.9rem;
 }
 
-.nav__item:hover {
-  color: var(--color-prominent);
-}
-
-.caret {
-  color: var(--color-prominent);
-  margin-left: var(--spacing-2);
-  display: inline-block;
-  transition: transform 200ms ease;
-}
-
-.caret.flip {
-  transform: rotate(180deg);
-}
-
-.dropdown {
-  list-style: none;
-  position: absolute;
-  right: 0;
-  top: 2.5rem;
-  z-index: 20;
-  min-width: 100%;
-  background-color: var(--color-bg);
-  border-radius: var(--b-radius);
-  padding: var(--spacing-2) var(--spacing-4) var(--spacing-2) 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  visibility: hidden;
-  opacity: 0;
-  transform: translateY(-10px);
-  transition: visibility 200ms linear, opacity 200ms linear,
-    transform 200ms linear;
-}
-
-.dropdown.show {
-  visibility: visible;
-  opacity: 100;
-  transform: translateY(0);
-}
-
-.dropdown li {
-  margin: var(--spacing-1) 0;
+@media only screen and (min-width: 768px) {
+  .nav__items-main-container {
+    padding: 0;
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
 }
 
 .background {
   background: var(--color-bg);
   position: absolute;
-  width: 100%;
-  height: 100%;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
   z-index: 1;
 }
 </style>
