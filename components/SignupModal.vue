@@ -46,7 +46,10 @@
 
 <script>
 import { Actions } from '~/constants'
+import notifyApiError from '~/mixins/notifyApiError'
+
 export default {
+  mixins: [notifyApiError],
   data() {
     return {
       loading: false,
@@ -65,12 +68,12 @@ export default {
           password: this.password,
         })
         .then(() => {
+          this.$toast.success('Account created. You can continue exploring.')
           this.$modal.hide('signup')
-          this.loading = false
         })
-        .catch((err) => {
+        .catch(this.notifyApiError)
+        .finally(() => {
           this.loading = false
-          alert(err)
         })
     },
     onLoginClick() {
@@ -105,7 +108,7 @@ export default {
   flex-grow: 1;
 }
 
-@media only screen and (min-width: 720px) {
+@media only screen and (min-width: 768px) {
   .wrapper__inner {
     display: grid;
     grid-template-columns: 1fr 1fr;
