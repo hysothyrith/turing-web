@@ -1,6 +1,6 @@
 import { Mutations } from '~/constants'
 
-export default function ({ app, store }) {
+export default function ({ store }) {
   if (process.server) {
     return
   }
@@ -13,12 +13,5 @@ export default function ({ app, store }) {
     }
   }
 
-  app.router.onReady(() => {
-    setAuthData()
-  })
-
-  app.router.beforeEach((_to, _from, next) => {
-    setAuthData()
-    next()
-  })
+  setAuthData()
 }
