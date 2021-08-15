@@ -1,5 +1,23 @@
 import { Actions, Getters, Mutations } from '~/constants'
 
+function cachedCaller(context, axios, cacheTimeout = 1000 * 60 * 5) {
+  async function get(route) {
+    const cache = context.getters.getFromCache(route)
+    if (!cache) {
+      const data = await axios.$get(route)
+      context.commit(Mutations.SET_CACHE, { key: route, data })
+      setTimeout(() => {
+        context.commit(Mutations.INVALIDATE_CACHE, route)
+      }, cacheTimeout)
+      return data
+    } else {
+      return cache
+    }
+  }
+
+  return { get }
+}
+
 export const state = () => ({
   user: null,
   spotlightMovies: [],
@@ -9,6 +27,8 @@ export const state = () => ({
   currentMovie: null,
   currentScreening: null,
   tickets: [],
+  currentRouteMeta: {},
+  cache: {},
 })
 
 export const mutations = {
@@ -23,6 +43,9 @@ export const mutations = {
     this.$axios.setToken('')
     localStorage.removeItem('user')
     localStorage.removeItem('token')
+  },
+  [Mutations.SET_CURRENT_ROUTE_META](state, meta) {
+    state.currentRouteMeta = meta
   },
   [Mutations.SET_SPOTLIGHT_MOVIES](state, movies) {
     state.spotlightMovies = movies
@@ -44,6 +67,12 @@ export const mutations = {
   },
   [Mutations.SET_TICKETS](state, tickets) {
     state.tickets = tickets
+  },
+  [Mutations.INVALIDATE_CACHE](state, key) {
+    state.cache[key] = undefined
+  },
+  [Mutations.SET_CACHE](state, { key, data }) {
+    state.cache[key] = data
   },
 }
 
@@ -69,6 +98,9 @@ export const getters = {
       }
     })
   },
+  [Getters.getFromCache]: (state) => (key) => {
+    return state.cache[key]
+  },
 }
 
 export const actions = {
@@ -83,18 +115,23 @@ export const actions = {
     const data = await this.$axios.$post('login', creds)
     commit(Mutations.SET_AUTH_DATA, data)
   },
-  async [Actions.getSpotlightMovies]({ commit }) {
-    const spotlightMovies = await this.$axios.$get('movies/advertisement')
-    commit(Mutations.SET_SPOTLIGHT_MOVIES, mapMovies(spotlightMovies))
+  async [Actions.getSpotlightMovies](context) {
+    const data = await cachedCaller(context, this.$axios).get(
+      'movies/advertisement'
+    )
+    context.commit(Mutations.SET_SPOTLIGHT_MOVIES, mapMovies(data))
   },
-  async [Actions.getMovies]({ commit }) {
-    const nowScreeningMovies = await this.$axios.$get('movies/now-showing')
-    const upcomingMovies = await this.$axios.$get('movies/upcoming')
+  async [Actions.getMovies](context) {
+    const { commit } = context
+    const caller = cachedCaller(context, this.$axios)
+    const nowScreeningMovies = await caller.get('movies/now-showing')
+    const upcomingMovies = await caller.get('movies/upcoming')
     commit(Mutations.SET_NOW_SCREENING_MOVIES, mapMovies(nowScreeningMovies))
     commit(Mutations.SET_UPCOMING_MOVIES, mapMovies(upcomingMovies))
   },
-  async [Actions.getMovie]({ commit }, id) {
-    const data = await this.$axios.$get(`movies/${id}`)
+  async [Actions.getMovie](context, id) {
+    const { commit } = context
+    const data = await cachedCaller(context, this.$axios).get(`movies/${id}`)
     const movie = {
       ...data,
       cast: mapToNames(data.casts),
@@ -115,8 +152,10 @@ export const actions = {
     }
     commit(Mutations.SET_CURRENT_MOVIE, movie)
   },
-  async [Actions.getShowtimes]({ commit }) {
-    const data = await this.$axios.$get('screenings/now-showing')
+  async [Actions.getShowtimes](context) {
+    const data = await cachedCaller(context, this.$axios).get(
+      'screenings/now-showing'
+    )
     const showtimes = data.map((movie) => {
       return {
         ...movie,
@@ -129,7 +168,7 @@ export const actions = {
       }
     })
 
-    commit(Mutations.SET_SHOWTIMES, showtimes)
+    context.commit(Mutations.SET_SHOWTIMES, showtimes)
   },
   async [Actions.getScreening]({ commit }, screeningId) {
     const data = await this.$axios.$get(`grid/${screeningId}`)
