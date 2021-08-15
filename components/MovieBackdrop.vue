@@ -7,7 +7,7 @@
       class="backdrop"
       @load="$emit('load')"
     />
-    <div class="overlay" />
+    <div v-if="overlay" class="overlay" />
   </div>
 </template>
 
@@ -25,6 +25,9 @@ export default {
     size: {
       type: String,
       default: 'original',
+    },
+    overlay: {
+      type: Boolean,
     },
   },
 }

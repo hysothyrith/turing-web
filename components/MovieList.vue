@@ -90,7 +90,7 @@ export default {
   transform: scale(1.04);
 }
 
-@media only screen and (min-width: 720px) {
+@media only screen and (min-width: 768px) {
   .posters {
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   }

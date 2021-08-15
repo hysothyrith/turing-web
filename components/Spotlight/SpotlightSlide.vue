@@ -12,6 +12,7 @@
       class="backdrop"
       :src="currentMovie.backdrop"
       :movie-title="currentMovie.title"
+      overlay
       @load="enter"
     />
     <div class="info">
@@ -21,7 +22,7 @@
         <spacer axis="horizontal" size="2" />
         <movie-rating>{{ currentMovie.rating }}</movie-rating>
       </div>
-      <p class="synopsis">{{ currentMovie.synopsis }}</p>
+      <p class="synopsis sm-none">{{ currentMovie.synopsis }}</p>
     </div>
     <div class="overlay" />
   </div>
@@ -113,7 +114,7 @@ export default {
 
 /* Transitions */
 .info * {
-  transition: opacity 400ms ease, transform 600ms ease;
+  transition: opacity 500ms ease, transform 600ms ease;
 }
 
 .enter .backdrop {
