@@ -235,15 +235,12 @@
 }
 
 @media only screen and (max-width: 576px) {
-  /* Small */
-  .sm-none {
-    display: none;
-  }
+  /* Extra small */
 }
 
 @media only screen and (max-width: 768px) {
-  /* Medium */
-  .md-none {
+  /* Small */
+  .sm-none {
     display: none;
   }
 }
