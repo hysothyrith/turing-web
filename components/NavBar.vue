@@ -102,8 +102,6 @@ export default {
   /* Enables horizontal scrolling */
   overflow-x: scroll;
   white-space: nowrap;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
   mask-image: linear-gradient(
     to right,
     transparent,
@@ -118,6 +116,16 @@ export default {
     black 90%,
     transparent
   );
+
+  /* Hides scrollbar  */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.nav__items-main-container::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+  display: none;
 }
 
 .nav__items-main-list {
