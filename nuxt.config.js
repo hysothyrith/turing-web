@@ -80,4 +80,8 @@ export default {
   },
 
   loadingIndicator: '~/static/firstLoad.html',
+
+  generate: {
+    fallback: true,
+  },
 }
