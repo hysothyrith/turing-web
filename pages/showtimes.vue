@@ -1,45 +1,47 @@
 <template>
   <div>
     <h1>Showtimes</h1>
-    <div v-if="status.isLoading()">Loading...</div>
-    <main v-if="status.isResolved()" class="main">
-      <div
-        v-for="movie in selectedDateShowtimes"
-        :key="movie.id"
-        class="movie-showtimes"
-      >
-        <movie-poster :src="movie.poster" :movie-title="movie.title" />
-        <div>
-          <strong class="h5-size text-prominent"
-            >{{ movie.title }}
-            <spacer size="8" style="display: block" axis="vertical" />
-          </strong>
+    <fade-transition>
+      <loading-box v-if="status.isLoading()" />
+      <main v-if="status.isResolved()" class="main">
+        <div
+          v-for="movie in selectedDateShowtimes"
+          :key="movie.id"
+          class="movie-showtimes"
+        >
+          <movie-poster :src="movie.poster" :movie-title="movie.title" />
+          <div>
+            <strong class="h5-size text-prominent"
+              >{{ movie.title }}
+              <spacer size="8" style="display: block" axis="vertical" />
+            </strong>
 
-          <div
-            v-for="showtime in movie.showtimes"
-            :key="showtime.id"
-            class="screening-time__item"
-          >
-            <nuxt-link
-              :to="{
-                name: 'movies-id',
-                params: { id: movie.id },
-                query: {
-                  cinema: showtime.cinemaId,
-                  theatre: showtime.theatreId,
-                  screening: showtime.id,
-                },
-              }"
-              class="screening-time__link"
+            <div
+              v-for="showtime in movie.showtimes"
+              :key="showtime.id"
+              class="screening-time__item"
             >
-              {{ formatTime(showtime.startTime) }}
-            </nuxt-link>
-            <ph-caret-right :size="18" />
+              <nuxt-link
+                :to="{
+                  name: 'movies-id',
+                  params: { id: movie.id },
+                  query: {
+                    cinema: showtime.cinemaId,
+                    theatre: showtime.theatreId,
+                    screening: showtime.id,
+                  },
+                }"
+                class="screening-time__link"
+              >
+                {{ formatTime(showtime.startTime) }}
+              </nuxt-link>
+              <ph-caret-right :size="18" />
+            </div>
           </div>
+          <spacer size="8" style="display: block" axis="vertical" />
         </div>
-        <spacer size="8" style="display: block" axis="vertical" />
-      </div>
-    </main>
+      </main>
+    </fade-transition>
   </div>
 </template>
 
