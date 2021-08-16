@@ -232,9 +232,10 @@ export default {
       this.selectedSeats = []
     },
     onTimeSelect(screening) {
+      this.theatreStatus.reset()
       this.selectedSeats = []
       this.selectedScreening = screening
-      this.theatreStatus.beginLoading(400)
+      this.theatreStatus.beginLoading()
       this.$store
         .dispatch(Actions.getScreening, screening.id)
         .then(() => {

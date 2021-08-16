@@ -34,4 +34,9 @@ export default class AsyncStatus {
     clearTimeout(this.timeout)
     this.status = 'rejected'
   }
+
+  reset() {
+    clearTimeout(this.timeout)
+    this.status = 'idle'
+  }
 }
