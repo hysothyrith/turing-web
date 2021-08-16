@@ -5,7 +5,8 @@
         <div class="cover__wrapper">
           <img
             class="img--cover cover"
-            src="https://images.unsplash.com/photo-1559570278-eb8d71d06403?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1162&q=80"
+            src="https://source.unsplash.com/23LET4Hxj_U/640x426"
+            alt="Picture watching movies inside a theatre"
           />
         </div>
         <div class="content__wrapper">
