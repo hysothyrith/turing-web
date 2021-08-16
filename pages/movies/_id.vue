@@ -47,7 +47,7 @@
                   >
                   <spacer size="1" axis="horizontal" />
                   <t-button
-                    v-if="hasScreenings()"
+                    v-if="hasScreenings"
                     @click="
                       $refs.showtimes.scrollIntoView({ behavior: 'smooth' })
                     "
@@ -57,7 +57,7 @@
               </div>
             </div>
             <div
-              v-if="hasScreenings()"
+              v-show="hasScreenings"
               ref="showtimes"
               class="showtimes__wrapper"
             >
@@ -69,7 +69,11 @@
                     :value="selectedCinema"
                     label="name"
                     :options="cinemasAvailable"
-                    placeholder="Select a cinema"
+                    :placeholder="
+                      screeningStatus.isLoading()
+                        ? 'Searching'
+                        : 'Select a cinema'
+                    "
                     class="cinema__select"
                     :clearable="false"
                     @input="onCinemaSelect"
@@ -81,7 +85,11 @@
                     :value="selectedDate"
                     label="formatted"
                     :options="datesAvailable"
-                    placeholder="Select a date"
+                    :placeholder="
+                      screeningStatus.isLoading()
+                        ? 'Searching'
+                        : 'Select a date'
+                    "
                     :disabled="!selectedCinema"
                     :clearable="false"
                     @input="onDateSelect"
@@ -94,7 +102,11 @@
                     label="startTime"
                     :options="timesAvailable"
                     :disabled="!selectedDate"
-                    placeholder="Select a time"
+                    :placeholder="
+                      screeningStatus.isLoading()
+                        ? 'Searching'
+                        : 'Select a time'
+                    "
                     :clearable="false"
                     @input="onTimeSelect"
                   />
@@ -160,6 +172,7 @@ export default {
     return {
       status: new AsyncStatus(),
       theatreStatus: new AsyncStatus(),
+      screeningStatus: new AsyncStatus(),
       movie: null,
       theatre: null,
       showBookingSummary: false,
@@ -171,6 +184,9 @@ export default {
   },
   computed: {
     ...mapState(['currentMovie', 'currentScreening']),
+    hasScreenings() {
+      return this.currentMovie && this.currentMovie.screenings.length > 0
+    },
     cinemasAvailable() {
       return this.currentMovie.screenings.map((screening) => screening.cinema)
     },
@@ -207,14 +223,38 @@ export default {
         .toFixed(2)
     },
   },
-  mounted() {
+  async mounted() {
     this.status.beginLoading()
-    this.$store
+    await this.$store
       .dispatch(Actions.getMovie, this.$route.params.id)
-      .then(() => {
-        this.status.resolve()
-      })
       .catch((err) => alert(err))
+    this.status.resolve()
+
+    /* process query param */
+    const { screening } = this.$route.query
+    if (screening) {
+      const interval = setInterval(() => {
+        if (this.$refs.showtimes) {
+          this.$refs.showtimes.scrollIntoView({ behavior: 'smooth' })
+          clearInterval(interval)
+        }
+      }, 200)
+      this.screeningStatus.beginLoading(0)
+      this.theatreStatus.beginLoading(0)
+      const screeningId = parseInt(screening)
+      await this.$store.dispatch(Actions.getScreening, screeningId)
+      this.selectedCinema = this.cinemasAvailable.find(
+        (el) => el.name === this.currentScreening.cinemaName
+      )
+      this.selectedDate = this.datesAvailable.find(
+        (el) => el.key === this.currentScreening.date
+      )
+      this.selectedScreening = this.timesAvailable.find(
+        (el) => el.id === screeningId
+      )
+      this.screeningStatus.resolve()
+      this.theatreStatus.resolve()
+    }
   },
   methods: {
     playTrailer() {
@@ -258,9 +298,6 @@ export default {
           seats: this.selectedSeats.map((seat) => seat.id),
         },
       })
-    },
-    hasScreenings() {
-      return this.currentMovie.screenings.length > 0
     },
   },
 }

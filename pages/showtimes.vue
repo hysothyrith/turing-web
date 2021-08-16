@@ -24,7 +24,11 @@
               :to="{
                 name: 'movies-id',
                 params: { id: movie.id },
-                query: { screening: showtime.id },
+                query: {
+                  cinema: showtime.cinemaId,
+                  theatre: showtime.theatreId,
+                  screening: showtime.id,
+                },
               }"
               class="screening-time__link"
             >

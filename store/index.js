@@ -93,6 +93,8 @@ export const getters = {
           return {
             id: screening.id,
             startTime: screening.start_time,
+            theatreId: screening.theaterId,
+            cinemaId: screening.cinemaId,
           }
         }),
       }
@@ -171,6 +173,7 @@ export const actions = {
     const data = await this.$axios.$get(`grid/${screeningId}`)
     const screening = {
       cinemaName: data.cinemaName,
+      date: data.date,
       theatre: {
         name: data.theatreName,
         rows: data.row,
