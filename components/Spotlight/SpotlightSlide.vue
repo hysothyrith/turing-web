@@ -59,7 +59,7 @@ export default {
 
       // Prefetch the new movie's backdrop
       const backdrop = new Image()
-      backdrop.src = `http://localhost:8000/uploads/images/original${newVal.backdrop}`
+      backdrop.src = `${this.$config.BASE_URL}/uploads/images/original${newVal.backdrop}`
 
       setTimeout(() => {
         this.currentMovie = newVal
