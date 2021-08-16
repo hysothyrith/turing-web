@@ -12,11 +12,8 @@
         </div>
       </template>
       <div class="overlay">
-        {{
-          loading
-            ? 'Loading theatre...'
-            : 'Select a cinema, date, and time to continue'
-        }}
+        <spinner v-if="loading" :size="24" />
+        <span v-else> Select a cinema, date, and time to continue </span>
       </div>
     </div>
   </div>
