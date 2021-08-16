@@ -17,6 +17,7 @@
             :seat-names="selectedSeats.map((el) => el.designation).join(', ')"
             :date-string="currentScreeningInfo.date"
             :time-string="currentScreeningInfo.startTime"
+            class="ticket-summary"
           />
         </div>
         <div class="payment__form-wrapper">
@@ -196,6 +197,10 @@ export default {
   align-items: center;
 }
 
+.ticket-summary {
+  grid-column: span 2;
+}
+
 .booking-summary {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -223,6 +228,10 @@ export default {
   .header {
     grid-template-columns: 250px auto;
     gap: var(--spacing-8);
+  }
+
+  .ticket-summary {
+    grid-column: span 1;
   }
 
   .summary {
