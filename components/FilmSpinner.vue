@@ -1,6 +1,6 @@
 <template>
   <img
-    src="~/assets/film_spinner.svg"
+    src="~/static/film_spinner.svg"
     alt="Loading indicator"
     class="film-spinner"
   />

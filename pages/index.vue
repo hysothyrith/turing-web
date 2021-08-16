@@ -20,8 +20,6 @@
 
 <script>
 import Vue from 'vue'
-import '~/assets/css/normalize.css'
-import '~/assets/css/main.css'
 import { mapState } from 'vuex'
 import AsyncStatus from '~/utils/AsyncStatus'
 import { Actions } from '~/constants'

@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex justify-content-center">
-    <img src="~assets/screen.svg" class="screen" />
+    <img src="~/static/screen.svg" class="screen" />
   </div>
 </template>
 
