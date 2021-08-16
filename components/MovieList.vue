@@ -1,6 +1,6 @@
 <template>
   <div class="movie-list">
-    <template v-if="loading || !movies">
+    <template v-if="loading">
       <skeleton width="26ch" height="2rem" border-radius="1rem" />
       <spacer size="1" />
       <div class="posters">
@@ -83,11 +83,13 @@ export default {
 }
 
 .poster__link {
-  transition: transform 150ms ease-out;
+  transition: transform 200ms ease-in, border-color 200ms ease;
+  border: 4px solid rgba(255, 255, 255, 0);
 }
 
 .poster__link:hover {
-  transform: scale(1.04);
+  transform: translateY(-10px);
+  border-color: rgb(255, 255, 255);
 }
 
 @media only screen and (min-width: 768px) {

@@ -39,7 +39,7 @@ export default {
   max-width: var(--width-max);
 }
 
-@media only screen and (min-width: 720px) {
+@media only screen and (min-width: 768px) {
   .body__wrapper {
     margin-top: var(--spacing-8);
   }

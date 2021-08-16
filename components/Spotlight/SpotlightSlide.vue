@@ -22,7 +22,7 @@
         <spacer axis="horizontal" size="2" />
         <movie-rating>{{ currentMovie.rating }}</movie-rating>
       </div>
-      <p class="synopsis sm-none">{{ currentMovie.synopsis }}</p>
+      <p class="synopsis">{{ currentMovie.synopsis }}</p>
     </div>
     <div class="overlay" />
   </div>
@@ -50,6 +50,7 @@ export default {
       LEAVE,
       transition: LEAVE,
       currentMovie: this.movie,
+      ready: false,
     }
   },
   watch: {
@@ -71,6 +72,10 @@ export default {
     },
     enter() {
       this.transition = ENTER
+      if (!this.ready) {
+        this.$emit('ready')
+        this.ready = true
+      }
     },
   },
 }
@@ -82,8 +87,8 @@ export default {
 }
 
 .backdrop {
-  height: 70vw;
-  max-height: 90vh;
+  height: 90vw;
+  max-height: 50vh;
   transition: opacity 500ms ease;
 }
 
@@ -138,10 +143,21 @@ export default {
 .title {
   transition-delay: 100ms;
   margin-bottom: var(--spacing-1);
-  font-size: 2.488rem;
+  font-size: var(--size-h4);
 }
 
 .meta {
   transition-delay: 50ms;
+}
+
+@media only screen and (min-width: 768px) {
+  .backdrop {
+    height: 70vw;
+    max-height: 85vh;
+  }
+
+  .title {
+    font-size: var(--size-h2);
+  }
 }
 </style>

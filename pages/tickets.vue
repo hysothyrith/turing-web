@@ -12,10 +12,18 @@
               :key="screeningId"
               class="ticket__item"
             >
-              <movie-poster
-                :src="screening.movie.poster"
-                :movie-title="screening.movie.title"
-              />
+              <div>
+                <picture class="movie__picture">
+                  <source
+                    :srcset="`${$config.BASE_URL}/uploads/images/w500/${screening.movie.poster}`"
+                    media="(min-width: 768px)"
+                  />
+                  <img
+                    :src="`${$config.BASE_URL}/uploads/images/w500/${screening.movie.backdrop}`"
+                    :alt="`${screening.movie.title} media image`"
+                  />
+                </picture>
+              </div>
               <div>
                 <tickets-summary
                   :movie="screening.movie"
@@ -43,7 +51,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { Actions, Mutations } from '~/constants'
+import { Actions } from '~/constants'
 import AsyncStatus from '~/utils/AsyncStatus'
 
 function groupScreenings(screenings) {
@@ -66,6 +74,11 @@ function groupScreenings(screenings) {
 }
 
 export default {
+  meta: {
+    auth: {
+      protected: true,
+    },
+  },
   data() {
     return {
       status: new AsyncStatus(),
@@ -108,10 +121,6 @@ export default {
       .catch((err) => alert(err))
   },
   methods: {
-    logout() {
-      this.$store.commit(Mutations.CLEAR_AUTH_DATA)
-      this.$router.push('/')
-    },
     objIsEmpty(obj) {
       return Object.keys(obj).length === 0
     },
@@ -127,7 +136,32 @@ export default {
 
 .ticket__item {
   display: grid;
-  grid-template-columns: 200px auto;
-  gap: var(--spacing-8);
+  grid-template-rows: 120px;
+  grid-auto-rows: min-content;
+  gap: var(--spacing-4);
+  padding-bottom: var(--spacing-4);
+  margin-bottom: var(--spacing-8);
+  border-bottom: var(--b-width) solid var(--color-muted);
+}
+
+.movie__picture img {
+  object-fit: cover;
+  object-position: top;
+}
+
+@media only screen and (min-width: 768px) {
+  .ticket__item {
+    grid-template-columns: 200px auto;
+    grid-template-rows: min-content;
+    gap: var(--spacing-8);
+  }
+
+  .ticket__item .poster {
+    display: block;
+  }
+
+  .ticket__item .backdrop {
+    display: none;
+  }
 }
 </style>

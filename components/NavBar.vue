@@ -42,13 +42,11 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { Mutations } from '~/constants'
 
 export default {
   data() {
     return {
       backgroundOpacity: 0,
-      showDropdown: false,
     }
   },
   computed: {
@@ -56,28 +54,13 @@ export default {
   },
   mounted() {
     window.addEventListener('scroll', this.updateBackgroundOpacity)
-    document.body.addEventListener('click', this.onClickOutside)
   },
   destroyed() {
     window.removeEventListener('scroll', this.updateBackgroundOpacity)
-    document.body.addEventListener('click', this.onClickOutside)
   },
   methods: {
     updateBackgroundOpacity() {
       this.backgroundOpacity = window.scrollY.toFixed() * 0.01
-    },
-    onClickOutside() {
-      if (this.showDropdown) this.showDropdown = false
-    },
-    onLogoutClick() {
-      this.$store.commit(Mutations.CLEAR_AUTH_DATA)
-      this.$toast.info('Logged out successfully.')
-      const routeIsProtected = this.currentRouteMeta.some(
-        (meta) => meta.auth && meta.auth.protected
-      )
-      if (routeIsProtected) {
-        this.$router.push('/')
-      }
     },
   },
 }

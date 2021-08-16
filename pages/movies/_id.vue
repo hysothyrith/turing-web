@@ -7,6 +7,7 @@
           class="backdrop"
           :movie-title="currentMovie.title"
           :src="currentMovie.backdrop"
+          overlay
         />
         <div class="main__wrapper">
           <main class="main">
@@ -360,7 +361,7 @@ label {
   box-shadow: rgba(88, 88, 255, 0.728) 0 20px 30px -10px;
 }
 
-@media only screen and (min-width: 720px) {
+@media only screen and (min-width: 768px) {
   .movie {
     grid-template-columns: 250px auto;
     gap: var(--spacing-8);

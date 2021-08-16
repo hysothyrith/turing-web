@@ -104,7 +104,10 @@ export default {
     ...mapState(['currentMovie', 'currentScreening']),
     selectedSeats() {
       const { grid } = this.currentScreening.theatre
-      const seatIds = [...this.$route.query.seats].map((id) => parseInt(id))
+      const seatsQuery = this.$route.query.seats
+      const seatIds = (
+        Array.isArray(seatsQuery) ? seatsQuery : [seatsQuery]
+      ).map((id) => parseInt(id))
       const seats = []
       grid.forEach((row) => {
         row.forEach((cell) => {
@@ -216,7 +219,7 @@ export default {
   padding: 0;
 }
 
-@media only screen and (min-width: 720px) {
+@media only screen and (min-width: 768px) {
   .header {
     grid-template-columns: 250px auto;
     gap: var(--spacing-8);

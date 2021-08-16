@@ -30,6 +30,13 @@
   --breakpoint-sm: 576px;
   --breakpoint-md: 768px;
   --breakpoint-lg: 992px;
+
+  /* Text sizes */
+  --size-h1: 1.802rem;
+  --size-h2: 1.602rem;
+  --size-h3: 1.424rem;
+  --size-h4: 1.266rem;
+  --size-h5: 1.125rem;
 }
 
 @media only screen and (min-width: 768px) {

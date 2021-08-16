@@ -5,6 +5,9 @@ export default function ({ store, route, redirect }) {
     return
   }
 
+  /* Set route meta */
+  store.commit(Mutations.SET_CURRENT_ROUTE_META, route.meta)
+
   const user = localStorage.getItem('user')
   const token = localStorage.getItem('token')
   if (user && token) {

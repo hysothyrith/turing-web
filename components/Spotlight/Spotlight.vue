@@ -4,15 +4,19 @@
       v-if="status.isResolved()"
       :movie="movies[index]"
       :interval="interval"
+      @ready="showControllers = true"
     />
-    <div class="controller__container">
-      <button
-        v-for="i in movies.length"
-        :key="i"
-        :class="['controller', { active: i - 1 === index }]"
-        @click="onControllerClick(i - 1)"
-      />
-    </div>
+
+    <fade-transition>
+      <div v-if="showControllers" class="controller__container">
+        <button
+          v-for="i in movies.length"
+          :key="i"
+          :class="['controller', { active: i - 1 === index }]"
+          @click="onControllerClick(i - 1)"
+        />
+      </div>
+    </fade-transition>
   </div>
 </template>
 
@@ -20,6 +24,7 @@
 import { mapState } from 'vuex'
 import { Actions } from '~/constants'
 import AsyncStatus from '~/utils/AsyncStatus'
+import grabSentences from '~/utils/grabSentences'
 
 export default {
   props: {
@@ -33,10 +38,16 @@ export default {
       status: new AsyncStatus(),
       index: 0,
       tick: null,
+      showControllers: false,
     }
   },
   computed: {
-    ...mapState({ movies: (state) => state.spotlightMovies }),
+    ...mapState({
+      movies: (state) =>
+        state.spotlightMovies.map((movie) => {
+          return { ...movie, synopsis: grabSentences(movie.synopsis, 2) }
+        }),
+    }),
   },
   mounted() {
     this.status.beginLoading()
@@ -59,6 +70,9 @@ export default {
       this.index = index
       this.pause()
     },
+    onFirstReady() {
+      alert('ready')
+    },
   },
 }
 </script>
@@ -66,8 +80,8 @@ export default {
 <style scoped>
 .spotlight {
   position: relative;
-  height: 70vw;
-  max-height: 90vh;
+  height: 90vw;
+  max-height: 50vh;
 }
 
 .controller__container {
@@ -86,6 +100,7 @@ export default {
   cursor: pointer;
   background-color: var(--color-less-prominent);
   transition: background-color 1000ms ease;
+  padding: 0;
 }
 
 .controller.active {
@@ -93,6 +108,11 @@ export default {
 }
 
 @media only screen and (min-width: 768px) {
+  .spotlight {
+    height: 70vw;
+    max-height: 85vh;
+  }
+
   .controller__container {
     position: absolute;
     right: 4vw;

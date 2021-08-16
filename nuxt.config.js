@@ -56,8 +56,7 @@ export default {
     ],
   ],
   axios: {
-    baseURL: 'http://localhost:8000/api/web',
-    // baseUrl: 'http://165.227.93.1:7000/api/web',
+    baseURL: process.env.API_BASE_URL,
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
@@ -74,6 +73,6 @@ export default {
   ssr: false,
 
   publicRuntimeConfig: {
-    BASE_URL: 'http://localhost:8000',
+    BASE_URL: process.env.BASE_URL,
   },
 }

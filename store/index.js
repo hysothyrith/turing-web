@@ -69,7 +69,7 @@ export const mutations = {
     state.tickets = tickets
   },
   [Mutations.INVALIDATE_CACHE](state, key) {
-    state.cache[key] = undefined
+    delete state.cache[key]
   },
   [Mutations.SET_CACHE](state, { key, data }) {
     state.cache[key] = data
@@ -105,10 +105,7 @@ export const getters = {
 
 export const actions = {
   async [Actions.signup]({ commit }, creds) {
-    const data = await this.$axios.$post('register', {
-      ...creds,
-      phoneNumber: '012100200',
-    })
+    const data = await this.$axios.$post('register', creds)
     commit(Mutations.SET_AUTH_DATA, data)
   },
   async [Actions.login]({ commit }, creds) {

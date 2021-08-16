@@ -6,12 +6,12 @@
         <movie-list
           title="Now screening"
           :movies="nowScreeningMovies"
-          :loading="!status.isResolved()"
+          :loading="status.isLoading()"
         />
         <movie-list
           title="Upcoming"
           :movies="upcomingMovies"
-          :loading="!status.isResolved()"
+          :loading="status.isLoading()"
         />
       </main>
     </div>
@@ -46,20 +46,8 @@ export default Vue.extend({
 
 <style scoped>
 .main {
-  margin: 0 var(--spacing-side);
-}
-
-.movie__skeleton-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: var(--spacing-4);
-}
-
-.poster__skeleton::before {
-  content: '';
-  display: block;
-  height: 0;
-  width: 0;
-  padding-bottom: calc(3 / 2 * 100%);
+  position: relative;
+  margin: var(--spacing-4) var(--spacing-side);
+  z-index: 1;
 }
 </style>
