@@ -1,6 +1,6 @@
 export default class AsyncStatus {
   status = 'idle'
-  timeout: NodeJS.Timeout = setTimeout(() => {}, 0)
+  timeout = setTimeout(() => {}, 0)
 
   isIdle() {
     return this.status === 'idle'
