@@ -123,8 +123,10 @@ export const actions = {
   async [Actions.getMovies](context) {
     const { commit } = context
     const caller = cachedCaller(context, this.$axios)
-    const nowScreeningMovies = await caller.get('movies/now-showing')
-    const upcomingMovies = await caller.get('movies/upcoming')
+    const [nowScreeningMovies, upcomingMovies] = await Promise.all([
+      caller.get('movies/now-showing'),
+      caller.get('movies/upcoming'),
+    ])
     commit(Mutations.SET_NOW_SCREENING_MOVIES, mapMovies(nowScreeningMovies))
     commit(Mutations.SET_UPCOMING_MOVIES, mapMovies(upcomingMovies))
   },

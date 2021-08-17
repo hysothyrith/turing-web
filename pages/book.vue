@@ -137,12 +137,11 @@ export default {
     this.status.beginLoading()
     this.seats = this.$route.query.seats
     try {
-      await this.$store.dispatch(Actions.getMovie, this.$route.query.movie)
+      await Promise.all([
+        this.$store.dispatch(Actions.getMovie, this.$route.query.movie),
+        this.$store.dispatch(Actions.getScreening, this.$route.query.screening),
+      ])
       this.setCurrentScreeningInfo()
-      await this.$store.dispatch(
-        Actions.getScreening,
-        this.$route.query.screening
-      )
       this.status.resolve()
     } catch (err) {
       alert(err)
