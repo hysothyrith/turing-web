@@ -71,11 +71,12 @@
                     :options="cinemasAvailable"
                     :placeholder="
                       screeningStatus.isLoading()
-                        ? 'Searching'
+                        ? 'Loading'
                         : 'Select a cinema'
                     "
                     class="cinema__select"
                     :clearable="false"
+                    :searchable="false"
                     @input="onCinemaSelect"
                   />
                 </div>
@@ -86,12 +87,11 @@
                     label="formatted"
                     :options="datesAvailable"
                     :placeholder="
-                      screeningStatus.isLoading()
-                        ? 'Searching'
-                        : 'Select a date'
+                      screeningStatus.isLoading() ? 'Loading' : 'Select a date'
                     "
                     :disabled="!selectedCinema"
                     :clearable="false"
+                    :searchable="false"
                     @input="onDateSelect"
                   />
                 </div>
@@ -103,11 +103,10 @@
                     :options="timesAvailable"
                     :disabled="!selectedDate"
                     :placeholder="
-                      screeningStatus.isLoading()
-                        ? 'Searching'
-                        : 'Select a time'
+                      screeningStatus.isLoading() ? 'Loading' : 'Select a time'
                     "
                     :clearable="false"
+                    :searchable="false"
                     @input="onTimeSelect"
                   />
                 </div>

@@ -36,7 +36,7 @@
                   :time-string="screening.details.startTime"
                 />
                 <t-button
-                  class="mt-4"
+                  class="mt-6"
                   @click="
                     onShowTicketsClick({
                       movie: screening.movie,

@@ -3,6 +3,7 @@
     <t-button
       class="control control--prev"
       aria-label="Previous ticket"
+      title="Previous"
       :disabled="currentIndex === 0"
       @click="$emit('change', items[currentIndex - 1])"
     >
@@ -18,6 +19,7 @@
     <t-button
       class="control control--next"
       aria-label="Next ticket"
+      title="Next"
       :disabled="currentIndex === items.length - 1"
       @click="$emit('change', items[currentIndex + 1])"
     >
