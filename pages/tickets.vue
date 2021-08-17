@@ -122,7 +122,7 @@ export default {
       )
     },
   },
-  mounted() {
+  created() {
     this.status.beginLoading()
     this.$store
       .dispatch(Actions.getTickets)

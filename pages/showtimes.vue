@@ -82,7 +82,7 @@ export default {
       })
     },
   },
-  async mounted() {
+  async created() {
     this.status.beginLoading()
 
     await this.$store.dispatch(Actions.getShowtimes)

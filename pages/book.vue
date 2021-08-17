@@ -133,7 +133,7 @@ export default {
       }, {})
     },
   },
-  async mounted() {
+  async created() {
     this.status.beginLoading()
     this.seats = this.$route.query.seats
     try {

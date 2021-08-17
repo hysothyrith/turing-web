@@ -222,7 +222,7 @@ export default {
         .toFixed(2)
     },
   },
-  async mounted() {
+  async created() {
     this.status.beginLoading()
     await this.$store
       .dispatch(Actions.getMovie, this.$route.params.id)

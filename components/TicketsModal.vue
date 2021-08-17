@@ -54,7 +54,7 @@ export default {
       qrStatus: new AsyncStatus(),
     }
   },
-  mounted() {
+  created() {
     this.qrStatus.beginLoading(0)
   },
   methods: {
