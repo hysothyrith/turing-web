@@ -85,6 +85,7 @@ export default {
 }
 
 .controller__container {
+  margin-top: -4px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -114,6 +115,7 @@ export default {
   }
 
   .controller__container {
+    margin: 0;
     position: absolute;
     right: 4vw;
     top: 0;

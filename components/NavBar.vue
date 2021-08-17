@@ -2,7 +2,11 @@
   <nav role="navigation" class="nav">
     <ul class="nav__inner">
       <li class="flex-grow-1">
-        <nuxt-link to="/" class="nav__brand">Turing&nbsp;Cinemas</nuxt-link>
+        <nuxt-link to="/" class="nav__brand"
+          >Turing<span class="d-sm-none d-md-inline"
+            >&nbsp;Cinemas</span
+          ></nuxt-link
+        >
       </li>
       <li class="nav__items-main-container">
         <ul class="nav__items-main-list">

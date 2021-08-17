@@ -13,7 +13,9 @@
       </template>
       <div class="overlay">
         <spinner v-if="loading" :size="24" />
-        <span v-else> Select a cinema, date, and time to continue </span>
+        <span v-else class="text-center">
+          Select a cinema, date, and time to continue
+        </span>
       </div>
     </div>
   </div>

@@ -22,7 +22,10 @@
         <spacer axis="horizontal" size="2" />
         <movie-rating>{{ currentMovie.rating }}</movie-rating>
       </div>
-      <p class="synopsis">{{ currentMovie.synopsis }}</p>
+      <p class="synopsis d-sm-none d-md-block">{{ currentMovie.synopsis }}</p>
+      <span class="d-sm-inline-block d-md-none"
+        ><spacer size="8" axis="vertical"
+      /></span>
     </div>
     <div class="overlay" />
   </div>
