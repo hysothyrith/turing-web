@@ -49,6 +49,7 @@
 import { mapState, mapGetters } from 'vuex'
 import { Actions } from '~/constants'
 import AsyncStatus from '~/utils/AsyncStatus'
+import { formatTime } from '~/utils/dateTools'
 
 export default {
   data() {
@@ -71,9 +72,7 @@ export default {
   },
   methods: {
     formatTime(time) {
-      return new Date(
-        `${this.selectedDate.toLocaleDateString()} ${time}`
-      ).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      return formatTime(time)
     },
     setSelectedDateShowtimes() {
       const selectedDateString = this.selectedDate.toISOString().split('T')[0]
