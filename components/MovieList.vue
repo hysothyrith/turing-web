@@ -1,7 +1,7 @@
 <template>
   <div class="movie-list">
     <template v-if="loading">
-      <skeleton width="26ch" height="2rem" border-radius="1rem" />
+      <skeleton width="26ch" height="1.8rem" border-radius="1rem" />
       <spacer size="1" />
       <div class="posters">
         <skeleton
@@ -50,8 +50,8 @@ export default {
     }
   },
   mounted() {
-    if (window.innerWidth < 720) {
-      this.skeletonCount = Math.floor(window.innerWidth / 110)
+    if (window.innerWidth < 768) {
+      this.skeletonCount = Math.floor(window.innerWidth / 160)
     } else {
       this.skeletonCount = Math.floor(window.innerWidth / 240)
     }
@@ -70,7 +70,7 @@ export default {
 
 .posters {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: var(--spacing-4);
 }
 
