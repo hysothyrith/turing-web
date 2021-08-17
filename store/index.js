@@ -155,17 +155,30 @@ export const actions = {
     const data = await cachedCaller(context, this.$axios).get(
       'screenings/now-showing'
     )
-    const showtimes = data.map((movie) => {
-      return {
-        ...movie,
-        directors: mapToNames(movie.directors),
-        cast: mapToNames(movie.casts),
-        genres: mapToNames(movie.genres),
-        trailer: movie.trailerUrl,
-        casts: undefined,
-        trailerUrl: undefined,
-      }
-    })
+    const showtimes = data.reduce((acc, movie) => {
+      Object.entries(movie.screenings).forEach(([date, screenings]) => {
+        if (!acc[date]) {
+          acc[date] = {}
+        }
+        const stringMovieId = movie.id.toString()
+        if (!acc[date][stringMovieId]) {
+          acc[date][stringMovieId] = {
+            details: {
+              ...movie,
+              directors: mapToNames(movie.directors),
+              cast: mapToNames(movie.casts),
+              genres: mapToNames(movie.genres),
+              trailer: movie.trailerUrl,
+              screenings: undefined,
+              casts: undefined,
+              trailerUrl: undefined,
+            },
+          }
+        }
+        acc[date][stringMovieId].screenings = screenings
+      })
+      return acc
+    }, {})
 
     context.commit(Mutations.SET_SHOWTIMES, showtimes)
   },

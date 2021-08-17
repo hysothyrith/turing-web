@@ -4,41 +4,56 @@
     <fade-transition>
       <loading-box v-if="status.isLoading()" />
       <main v-if="status.isResolved()" class="main">
-        <div
-          v-for="movie in selectedDateShowtimes"
-          :key="movie.id"
-          class="movie-showtimes"
-        >
-          <movie-poster :src="movie.poster" :movie-title="movie.title" />
+        <div class="mb-8">
           <div>
-            <strong class="h5-size text-prominent"
-              >{{ movie.title }}
-              <spacer size="8" style="display: block" axis="vertical" />
-            </strong>
+            <label for="date-select">Date</label>
+            <t-select
+              v-model="selectedDate"
+              label="formatted"
+              :options="datesAvailable"
+              :clearable="false"
+              :searchable="false"
+            />
+          </div>
+        </div>
+        <div class="showtimes__container">
+          <div
+            v-for="({ details, screenings }, movieId) in showtimes[
+              selectedDate.key
+            ]"
+            :key="movieId"
+            class="showtimes__item"
+          >
+            <movie-poster :src="details.poster" :movie-title="details.title" />
+            <div>
+              <strong class="h5-size text-prominent"
+                >{{ details.title }}
+                <spacer size="8" style="display: block" axis="vertical" />
+              </strong>
 
-            <div
-              v-for="showtime in movie.showtimes"
-              :key="showtime.id"
-              class="screening-time__item"
-            >
-              <nuxt-link
-                :to="{
-                  name: 'movies-id',
-                  params: { id: movie.id },
-                  query: {
-                    cinema: showtime.cinemaId,
-                    theatre: showtime.theatreId,
-                    screening: showtime.id,
-                  },
-                }"
-                class="screening-time__link"
+              <div
+                v-for="screening in screenings"
+                :key="screening.id"
+                class="screening-time__item"
               >
-                {{ formatTime(showtime.startTime) }}
-              </nuxt-link>
-              <ph-caret-right :size="18" />
+                <nuxt-link
+                  :to="{
+                    name: 'movies-id',
+                    params: { id: movieId },
+                    query: {
+                      cinema: screening.cinemaId,
+                      theatre: screening.theatreId,
+                      screening: screening.id,
+                    },
+                  }"
+                  class="screening-time__link"
+                >
+                  {{ formatTime(screening.start_time) }}
+                </nuxt-link>
+                <ph-caret-right :size="18" />
+              </div>
             </div>
           </div>
-          <spacer size="8" style="display: block" axis="vertical" />
         </div>
       </main>
     </fade-transition>
@@ -46,10 +61,10 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { Actions } from '~/constants'
 import AsyncStatus from '~/utils/AsyncStatus'
-import { formatTime } from '~/utils/dateTools'
+import { formatDate, formatTime } from '~/utils/dateTools'
 
 export default {
   data() {
@@ -61,35 +76,33 @@ export default {
   },
   computed: {
     ...mapState(['showtimes']),
-    ...mapGetters(['getShowtimesOnDate']),
+    datesAvailable() {
+      return Object.keys(this.showtimes).map((date) => {
+        return { key: date, formatted: formatDate(date) }
+      })
+    },
   },
   async mounted() {
     this.status.beginLoading()
+
     await this.$store.dispatch(Actions.getShowtimes)
-    this.selectedDate.setDate(this.selectedDate.getDate() + 1)
-    this.setSelectedDateShowtimes()
+    this.selectedDate = this.datesAvailable[0]
     this.status.resolve()
   },
   methods: {
-    formatTime(time) {
-      return formatTime(time)
-    },
-    setSelectedDateShowtimes() {
-      const selectedDateString = this.selectedDate.toISOString().split('T')[0]
-      this.selectedDateShowtimes = this.getShowtimesOnDate(selectedDateString)
-    },
+    formatTime,
   },
 }
 </script>
 
 <style scoped>
-.main {
+.showtimes__container {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--spacing-4);
 }
 
-.movie-showtimes {
+.showtimes__item {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--spacing-4);
@@ -112,12 +125,13 @@ export default {
   align-items: center;
 }
 
-@media only screen and (min-width: 920px) {
-  .main {
+@media only screen and (min-width: 768px) {
+  .showtimes__container {
     grid-template-columns: 1fr 1fr;
     gap: var(--spacing-8);
   }
-  .movie-showtimes {
+
+  .showtimes__item {
     gap: var(--spacing-8);
   }
 }
