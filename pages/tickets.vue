@@ -35,6 +35,16 @@
                   :date-string="screening.details.date"
                   :time-string="screening.details.startTime"
                 />
+                <t-button
+                  class="mt-4"
+                  @click="
+                    onShowTicketsClick({
+                      movie: screening.movie,
+                      tickets: screening.tickets,
+                    })
+                  "
+                  ><ph-ticket class="mr-2" />Show tickets</t-button
+                >
               </div>
             </li>
           </ul>
@@ -53,6 +63,7 @@
 import { mapState } from 'vuex'
 import { Actions } from '~/constants'
 import AsyncStatus from '~/utils/AsyncStatus'
+import TicketsModal from '~/components/TicketsModal'
 
 function groupScreenings(screenings) {
   return screenings.reduce((acc, el) => {
@@ -123,6 +134,13 @@ export default {
   methods: {
     objIsEmpty(obj) {
       return Object.keys(obj).length === 0
+    },
+    onShowTicketsClick({ movie, tickets }) {
+      this.$modal.show(
+        TicketsModal,
+        { movie, tickets },
+        { adaptive: true, height: 'auto' }
+      )
     },
   },
 }

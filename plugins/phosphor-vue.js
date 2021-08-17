@@ -7,6 +7,7 @@ import {
   PhPlay,
   PhTicket,
   PhCaretRight,
+  PhCaretLeft,
   PhCaretDown,
   PhCheck,
 } from 'phosphor-vue'
@@ -17,6 +18,7 @@ const icons = Object.assign(
     PhPlay,
     PhTicket,
     PhCaretRight,
+    PhCaretLeft,
     PhCaretDown,
     PhCheck,
   }

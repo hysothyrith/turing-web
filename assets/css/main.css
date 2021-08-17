@@ -167,6 +167,14 @@ select:focus {
   border: var(--b-width) solid var(--color-primary);
 }
 
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
 .input-group {
   margin-bottom: var(--spacing-4);
 }
