@@ -404,7 +404,7 @@ label {
   margin: 0 var(--spacing-side);
   padding: var(--spacing-4);
   border-radius: var(--b-radius);
-  background-color: rgb(75, 75, 255);
+  background-color: var(--color-highlight);
   box-shadow: rgba(88, 88, 255, 0.728) 0 20px 30px -10px;
 }
 

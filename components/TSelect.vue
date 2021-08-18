@@ -89,8 +89,8 @@ $vs-component-line-height: 2 !default;
 $vs-component-placeholder-color: var(--color-less-prominent) !default;
 
 //  Active State
-$vs-state-active-bg: #5897fb !default;
-$vs-state-active-color: #fff !default;
+$vs-state-active-bg: var(--color-highlight) !default;
+$vs-state-active-color: var(--color-prominent) !default;
 
 //  Disabled State
 $vs-state-disabled-bg: map_get($vs-colors, 'dark') !default;
@@ -120,7 +120,7 @@ $vs-dropdown-z-index: 1000 !default;
 $vs-dropdown-min-width: 160px !default;
 $vs-dropdown-max-height: 350px !default;
 $vs-dropdown-box-shadow: 0 3px 6px 0 map_get($vs-colors, 'darkest') !default;
-$vs-dropdown-bg: #fff !default;
+$vs-dropdown-bg: var(--color-muted) !default;
 
 @import 'vue-select/src/scss/vue-select.scss';
 
@@ -129,6 +129,10 @@ $vs-dropdown-bg: #fff !default;
 }
 
 .vs__selected {
+  color: var(--color-primary);
+}
+
+.vs__dropdown-option {
   color: var(--color-primary);
 }
 </style>
