@@ -77,9 +77,21 @@
                   </div>
                 </div>
               </div>
-              <t-button type="submit" :loading="purchaseStatus.isLoading()"
-                ><ph-check class="mr-2" />Confirm</t-button
-              >
+              <div v-if="isAuthenticated">
+                <t-button type="submit" :loading="purchaseStatus.isLoading()"
+                  ><ph-check class="mr-2" />Confirm</t-button
+                >
+              </div>
+              <div v-else>
+                <t-button @click.prevent="$modal.show('login')"
+                  >Log&nbsp;in</t-button
+                >
+                or
+                <t-button variant="text" @click.prevent="$modal.show('signup')"
+                  >Sign&nbsp;up</t-button
+                >
+                to continue
+              </div>
             </form>
           </div>
         </div>
@@ -89,7 +101,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { Actions } from '~/constants'
 import AsyncStatus from '~/utils/AsyncStatus'
 import notifyApiError from '~/mixins/notifyApiError'
@@ -110,6 +122,7 @@ export default {
   },
   computed: {
     ...mapState(['currentMovie', 'currentScreening']),
+    ...mapGetters(['isAuthenticated']),
     currentScreeningInfo() {
       if (!this.currentMovie) return null
       const res = this.currentMovie.screenings.find((el) => {
