@@ -98,6 +98,7 @@ export default {
   background-color: transparent;
   margin: var(--spacing-1);
   cursor: pointer;
+  padding: 0;
 }
 
 .seat:disabled {
