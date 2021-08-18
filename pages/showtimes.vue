@@ -82,9 +82,11 @@ export default {
   computed: {
     ...mapState(['showtimes']),
     datesAvailable() {
-      return Object.keys(this.showtimes).map((date) => {
-        return { key: date, formatted: formatDate(date) }
-      })
+      return Object.keys(this.showtimes)
+        .sort((a, b) => a.localeCompare(b))
+        .map((date) => {
+          return { key: date, formatted: formatDate(date) }
+        })
     },
   },
   methods: {
