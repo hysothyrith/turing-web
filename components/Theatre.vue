@@ -70,6 +70,7 @@ export default {
 .wrapper {
   border: var(--b-width) solid var(--color-muted);
   padding: var(--spacing-8) var(--spacing-4);
+  border-radius: 4px;
 }
 
 .grid {

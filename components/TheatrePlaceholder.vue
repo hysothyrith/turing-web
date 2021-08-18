@@ -36,7 +36,7 @@ export default {
 .wrapper {
   position: relative;
   border: var(--b-width) solid var(--color-muted);
-  padding: var(--spacing-4) var(--spacing-2);
+  padding: var(--spacing-8) var(--spacing-4);
   border-radius: 4px;
 }
 
