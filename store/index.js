@@ -133,6 +133,7 @@ export const actions = {
   async [Actions.getMovie](context, id) {
     const { commit } = context
     const data = await cachedCaller(context, this.$axios).get(`movies/${id}`)
+
     const movie = {
       ...data,
       cast: mapToNames(data.casts),

@@ -24,7 +24,12 @@
             :key="movieId"
             class="showtimes__item"
           >
-            <movie-poster :src="details.poster" :movie-title="details.title" />
+            <div>
+              <movie-poster
+                :src="details.poster"
+                :movie-title="details.title"
+              />
+            </div>
             <div>
               <strong class="h5-size text-prominent"
                 >{{ details.title }}
