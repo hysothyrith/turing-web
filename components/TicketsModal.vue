@@ -4,7 +4,7 @@
       <div class="qr__wrapper">
         <div class="qr__wrapper-inner">
           <img
-            :src="`https://api.qrserver.com/v1/create-qr-code/?data=${currentTicket.id}!&size=500x500`"
+            :src="getQrUrl(currentTicket.id)"
             :class="['qr', { ready: qrStatus.isResolved() }]"
             alt="QR code for ticket 1A"
             @load="onQrLoad"
@@ -55,7 +55,7 @@ export default {
     }
   },
   created() {
-    this.qrStatus.beginLoading(0)
+    this.qrStatus.beginLoading()
   },
   methods: {
     onPaginatorChange(ticket) {
@@ -64,6 +64,9 @@ export default {
     },
     onQrLoad() {
       this.qrStatus.resolve()
+    },
+    getQrUrl(payload) {
+      return `https://api.qrserver.com/v1/create-qr-code/?data=${payload}!&size=500x500`
     },
   },
 }

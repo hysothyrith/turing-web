@@ -1,11 +1,13 @@
 function preloadImages(srcs) {
   return new Promise((resolve, reject) => {
     let loaded = 0
+    const imgs = []
     srcs.forEach((src) => {
       const img = new Image()
+      imgs.push(img)
       img.onload = () => {
         if (++loaded === srcs.length) {
-          resolve()
+          resolve(imgs)
         }
       }
       img.onerror = () => {
