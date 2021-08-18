@@ -46,8 +46,6 @@
                     name: 'movies-id',
                     params: { id: movieId },
                     query: {
-                      cinema: screening.cinemaId,
-                      theatre: screening.theatreId,
                       screening: screening.id,
                     },
                   }"
