@@ -1,5 +1,5 @@
 export function formatTime(timeString) {
-  const date = new Date(`2020-01-01 ${timeString}`)
+  const date = new Date(`2020-01-01T${timeString}`)
   return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 }
 
