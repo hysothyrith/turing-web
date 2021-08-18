@@ -74,7 +74,7 @@
                         ? 'Loading'
                         : 'Select a cinema'
                     "
-                    class="cinema__select"
+                    :disabled="screeningStatus.isLoading()"
                     :clearable="false"
                     :searchable="false"
                     @input="onCinemaSelect"
@@ -87,7 +87,11 @@
                     label="formatted"
                     :options="datesAvailable"
                     :placeholder="
-                      screeningStatus.isLoading() ? 'Loading' : 'Select a date'
+                      screeningStatus.isLoading()
+                        ? 'Loading'
+                        : !selectedCinema
+                        ? 'Please select a cinema first'
+                        : 'Select a date'
                     "
                     :disabled="!selectedCinema"
                     :clearable="false"
@@ -103,7 +107,13 @@
                     :options="timesAvailable"
                     :disabled="!selectedDate"
                     :placeholder="
-                      screeningStatus.isLoading() ? 'Loading' : 'Select a time'
+                      screeningStatus.isLoading()
+                        ? 'Loading'
+                        : !selectedCinema
+                        ? 'Please select a cinema first'
+                        : !selectedDate
+                        ? 'Please select a date first'
+                        : 'Select a time'
                     "
                     :clearable="false"
                     :searchable="false"
