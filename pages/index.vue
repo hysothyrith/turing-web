@@ -24,6 +24,7 @@ import { mapState } from 'vuex'
 import { Actions } from '~/constants'
 import AsyncStatus from '~/utils/AsyncStatus'
 import preloadImages from '~/utils/preloadImages'
+import { runTimedPromise } from '~/utils/asyncTools'
 
 export default Vue.extend({
   layout: 'home',
@@ -37,10 +38,13 @@ export default Vue.extend({
     await this.$store.dispatch(Actions.getMovies)
     const mapPosters = (el) =>
       `${this.$config.BASE_URL}/uploads/images/w500${el.poster}`
-    await Promise.all([
-      preloadImages(this.nowScreeningMovies.map(mapPosters)),
-      preloadImages(this.upcomingMovies.map(mapPosters)),
-    ])
+    await runTimedPromise(
+      Promise.all([
+        preloadImages(this.nowScreeningMovies.map(mapPosters)),
+        preloadImages(this.upcomingMovies.map(mapPosters)),
+      ]),
+      3000
+    )
   },
   computed: {
     ...mapState(['nowScreeningMovies', 'upcomingMovies']),
