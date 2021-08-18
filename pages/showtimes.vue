@@ -16,47 +16,49 @@
             />
           </div>
         </div>
-        <div class="showtimes__container">
-          <div
-            v-for="({ details, screenings }, movieId) in showtimes[
-              selectedDate.key
-            ]"
-            :key="movieId"
-            class="showtimes__item"
-          >
-            <div>
-              <movie-poster
-                :src="details.poster"
-                :movie-title="details.title"
-              />
-            </div>
-            <div>
-              <strong class="h5-size text-prominent"
-                >{{ details.title }}
-                <spacer size="8" style="display: block" axis="vertical" />
-              </strong>
+        <div
+          v-for="({ name, movies }, cinemaId) in showtimes[selectedDate.key]
+            .cinemas"
+          :key="cinemaId"
+          class="mb-8"
+        >
+          <h2 class="mb-6">{{ name }}</h2>
+          <div class="showtimes__container">
+            <div v-for="(movie, movieId) in movies" :key="movieId">
+              <div class="showtimes__item">
+                <div>
+                  <movie-poster
+                    :src="movie.poster"
+                    :movie-title="movie.title"
+                  />
+                </div>
+                <div>
+                  <h3 class="h4-size text-prominent">{{ movie.title }}</h3>
 
-              <div
-                v-for="screening in screenings"
-                :key="screening.id"
-                class="screening-time__item"
-              >
-                <nuxt-link
-                  :to="{
-                    name: 'movies-id',
-                    params: { id: movieId },
-                    query: {
-                      screening: screening.id,
-                    },
-                  }"
-                  class="screening-time__link"
-                >
-                  {{ formatTime(screening.start_time) }}
-                </nuxt-link>
-                <ph-caret-right :size="18" />
+                  <div
+                    v-for="screening in movie.screenings"
+                    :key="screening.id"
+                    class="screening-time__item"
+                  >
+                    <nuxt-link
+                      :to="{
+                        name: 'movies-id',
+                        params: { id: movieId },
+                        query: {
+                          screening: screening.id,
+                        },
+                      }"
+                      class="screening-time__link"
+                    >
+                      {{ formatTime(screening.startTime) }}
+                    </nuxt-link>
+                    <ph-caret-right :size="18" />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+          <spacer axis="vertical" size="8" />
         </div>
       </main>
     </fade-transition>

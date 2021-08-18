@@ -18,6 +18,33 @@ function cachedCaller(context, axios, cacheTimeout = 1000 * 60 * 5) {
   return { get }
 }
 
+function mapMovies(movies) {
+  return movies.map((movie) => {
+    return {
+      ...movie,
+      cast: mapToNames(movie.casts),
+      directors: mapToNames(movie.directors),
+      genres: mapToNames(movie.genres),
+    }
+  })
+}
+
+function mapMovie(movie) {
+  return {
+    ...movie,
+    releaseDate: movie.releasedDate,
+    cast: mapToNames(movie.casts),
+    directors: mapToNames(movie.directors),
+    genres: mapToNames(movie.genres),
+    casts: undefined,
+    releasedDate: undefined,
+  }
+}
+
+function mapToNames(objs) {
+  return objs.map((obj) => obj.name)
+}
+
 export const state = () => ({
   user: null,
   spotlightMovies: [],
@@ -27,6 +54,8 @@ export const state = () => ({
   currentMovie: null,
   currentScreening: null,
   tickets: [],
+  cinemas: [],
+  concession: [],
   currentRouteMeta: {},
   cache: {},
 })
@@ -73,6 +102,12 @@ export const mutations = {
   },
   [Mutations.SET_CACHE](state, { key, data }) {
     state.cache[key] = data
+  },
+  [Mutations.SET_CINEMAS](state, cinemas) {
+    state.cinemas = cinemas
+  },
+  [Mutations.SET_CONCESSION](state, concession) {
+    state.concession = concession
   },
 }
 
@@ -155,35 +190,54 @@ export const actions = {
     commit(Mutations.SET_CURRENT_MOVIE, movie)
   },
   async [Actions.getShowtimes](context) {
-    const data = await cachedCaller(context, this.$axios).get(
-      'screenings/now-showing'
-    )
-    const showtimes = data.reduce((acc, movie) => {
-      Object.entries(movie.screenings).forEach(([date, screenings]) => {
-        if (!acc[date]) {
-          acc[date] = {}
-        }
-        const stringMovieId = movie.id.toString()
-        if (!acc[date][stringMovieId]) {
-          acc[date][stringMovieId] = {
-            details: {
-              ...movie,
-              directors: mapToNames(movie.directors),
-              cast: mapToNames(movie.casts),
-              genres: mapToNames(movie.genres),
-              trailer: movie.trailerUrl,
-              screenings: undefined,
-              casts: undefined,
-              trailerUrl: undefined,
-            },
+    const caller = cachedCaller(context, this.$axios)
+    const data = await caller.get('screenings/now-showing')
+
+    /* 
+      {
+        date {
+          cinemas {
+             ...cinemaDetails
+            movies {
+              ...movieDetails,
+              screenings[]
+            }
           }
         }
-        acc[date][stringMovieId].screenings = screenings
+      }
+    */
+    const showtimesByDate = data.reduce((acc, cinema) => {
+      cinema.movies.forEach((movie) => {
+        Object.entries(movie.screenings).forEach(([date, screeningsOnDate]) => {
+          if (!acc[date]) {
+            acc[date] = { cinemas: {} }
+          }
+          const strCinemaId = cinema.id.toString()
+          if (!acc[date].cinemas[strCinemaId]) {
+            acc[date].cinemas[strCinemaId] = {
+              name: cinema.name,
+              movies: {},
+            }
+          }
+          const strMovieId = movie.id.toString()
+          if (!acc[date].cinemas[strCinemaId].movies[strMovieId]) {
+            acc[date].cinemas[strCinemaId].movies[strMovieId] = {
+              title: movie.title,
+              runtime: movie.runningTime,
+              rating: movie.rating.title,
+              poster: movie.poster,
+              backdrop: movie.backdrop,
+              screenings: screeningsOnDate.map((el) => {
+                return { id: el.id, startTime: el.start_time }
+              }),
+            }
+          }
+        })
       })
       return acc
     }, {})
 
-    context.commit(Mutations.SET_SHOWTIMES, showtimes)
+    context.commit(Mutations.SET_SHOWTIMES, showtimesByDate)
   },
   async [Actions.getScreening]({ commit }, screeningId) {
     const data = await this.$axios.$get(`grid/${screeningId}`)
@@ -234,31 +288,12 @@ export const actions = {
     })
     commit(Mutations.SET_TICKETS, tickets)
   },
-}
-
-function mapMovies(movies) {
-  return movies.map((movie) => {
-    return {
-      ...movie,
-      cast: mapToNames(movie.casts),
-      directors: mapToNames(movie.directors),
-      genres: mapToNames(movie.genres),
-    }
-  })
-}
-
-function mapMovie(movie) {
-  return {
-    ...movie,
-    releaseDate: movie.releasedDate,
-    cast: mapToNames(movie.casts),
-    directors: mapToNames(movie.directors),
-    genres: mapToNames(movie.genres),
-    casts: undefined,
-    releasedDate: undefined,
-  }
-}
-
-function mapToNames(objs) {
-  return objs.map((obj) => obj.name)
+  async [Actions.getCinemas]({ commit }) {
+    const data = await this.$axios.$get('cinemas')
+    commit(Mutations.SET_CINEMAS, data)
+  },
+  async [Actions.getConcession]({ commit }) {
+    const data = await this.$axios.$get('products')
+    commit(Mutations.SET_CONCESSION, data)
+  },
 }

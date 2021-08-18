@@ -27,6 +27,10 @@
   color: var(--color-primary);
 }
 
+.text-less-prominent {
+  color: var(--color-less-prominent);
+}
+
 .small-size {
   font-size: 0.889rem;
 }
