@@ -2,8 +2,8 @@
   <div>
     <h1>Showtimes</h1>
     <fade-transition>
-      <loading-box v-if="status.isLoading()" />
-      <main v-if="status.isResolved()" class="main">
+      <loading-box v-if="$fetchState.pending" />
+      <main v-else class="main">
         <div class="mb-8">
           <div>
             <label for="date-select">Date</label>
@@ -63,16 +63,18 @@
 <script>
 import { mapState } from 'vuex'
 import { Actions } from '~/constants'
-import AsyncStatus from '~/utils/AsyncStatus'
 import { formatDate, formatTime } from '~/utils/dateTools'
 
 export default {
   data() {
     return {
-      status: new AsyncStatus(),
       selectedDate: new Date(),
       selectedDateShowtimes: [],
     }
+  },
+  async fetch() {
+    await this.$store.dispatch(Actions.getShowtimes)
+    this.selectedDate = this.datesAvailable[0]
   },
   computed: {
     ...mapState(['showtimes']),
@@ -81,13 +83,6 @@ export default {
         return { key: date, formatted: formatDate(date) }
       })
     },
-  },
-  async created() {
-    this.status.beginLoading()
-
-    await this.$store.dispatch(Actions.getShowtimes)
-    this.selectedDate = this.datesAvailable[0]
-    this.status.resolve()
   },
   methods: {
     formatTime,

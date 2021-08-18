@@ -2,8 +2,8 @@
   <div>
     <h1>Tickets</h1>
     <fade-transition>
-      <loading-box v-if="status.isLoading()" />
-      <div v-if="status.isResolved()">
+      <loading-box v-if="$fetchState.pending" />
+      <div v-else>
         <div v-if="!objIsEmpty(summary.newScreenings)">
           <h2>Upcoming screenings</h2>
           <ul class="ticket__list">
@@ -62,8 +62,8 @@
 <script>
 import { mapState } from 'vuex'
 import { Actions } from '~/constants'
-import AsyncStatus from '~/utils/AsyncStatus'
 import TicketsModal from '~/components/TicketsModal'
+import notifyApiError from '~/mixins/notifyApiError'
 
 function groupScreenings(screenings) {
   return screenings.reduce((acc, el) => {
@@ -85,15 +85,14 @@ function groupScreenings(screenings) {
 }
 
 export default {
+  mixins: [notifyApiError],
   meta: {
     auth: {
       protected: true,
     },
   },
-  data() {
-    return {
-      status: new AsyncStatus(),
-    }
+  async fetch() {
+    await this.$store.dispatch(Actions.getTickets).catch(this.notifyApiError)
   },
   computed: {
     ...mapState(['tickets']),
@@ -121,15 +120,6 @@ export default {
         this.objIsEmpty(this.summary.pastScreenings)
       )
     },
-  },
-  created() {
-    this.status.beginLoading()
-    this.$store
-      .dispatch(Actions.getTickets)
-      .then(() => {
-        this.status.resolve()
-      })
-      .catch((err) => alert(err))
   },
   methods: {
     objIsEmpty(obj) {

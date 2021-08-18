@@ -1,8 +1,8 @@
 <template>
   <div>
     <fade-transition>
-      <loading-box v-if="status.isLoading()" />
-      <main v-if="status.isResolved()">
+      <loading-box v-if="$fetchState.pending" />
+      <main v-else>
         <div class="header">
           <div>
             <movie-poster
@@ -92,17 +92,37 @@
 import { mapState } from 'vuex'
 import { Actions } from '~/constants'
 import AsyncStatus from '~/utils/AsyncStatus'
+import notifyApiError from '~/mixins/notifyApiError'
 
 export default {
+  mixins: [notifyApiError],
   data() {
     return {
-      status: new AsyncStatus(),
       purchaseStatus: new AsyncStatus(),
-      currentScreeningInfo: null,
     }
+  },
+  async fetch() {
+    this.seats = this.$route.query.seats
+    await Promise.all([
+      this.$store.dispatch(Actions.getMovie, this.$route.query.movie),
+      this.$store.dispatch(Actions.getScreening, this.$route.query.screening),
+    ]).catch(this.notifyApiError)
   },
   computed: {
     ...mapState(['currentMovie', 'currentScreening']),
+    currentScreeningInfo() {
+      if (!this.currentMovie) return null
+      const res = this.currentMovie.screenings.find((el) => {
+        return Object.entries(el.dates).find(([_, screenings]) => {
+          return screenings.find(
+            (screening) =>
+              screening.id === parseInt(this.$route.query.screening)
+          )
+        })
+      })
+      const [date, screenings] = Object.entries(res.dates)[0]
+      return { id: screenings[0].id, date, startTime: screenings[0].start_time }
+    },
     selectedSeats() {
       const { grid } = this.currentScreening.theatre
       const seatsQuery = this.$route.query.seats
@@ -133,39 +153,7 @@ export default {
       }, {})
     },
   },
-  async created() {
-    this.status.beginLoading()
-    this.seats = this.$route.query.seats
-    try {
-      await Promise.all([
-        this.$store.dispatch(Actions.getMovie, this.$route.query.movie),
-        this.$store.dispatch(Actions.getScreening, this.$route.query.screening),
-      ])
-      this.setCurrentScreeningInfo()
-      this.status.resolve()
-    } catch (err) {
-      alert(err)
-      this.status.reject()
-    }
-  },
   methods: {
-    setCurrentScreeningInfo() {
-      this.currentMovie.screenings.forEach((el) => {
-        for (const date in el.dates) {
-          const screenings = el.dates[date]
-          const screening = screenings.find(
-            (el2) => el2.id === parseInt(this.$route.query.screening)
-          )
-          if (screening) {
-            this.currentScreeningInfo = {
-              id: screening.id,
-              date,
-              startTime: screening.start_time,
-            }
-          }
-        }
-      })
-    },
     onSubmit() {
       this.purchaseStatus.beginLoading()
 
