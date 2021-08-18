@@ -274,14 +274,15 @@ export default {
       this.selectedDate = null
       this.selectedScreening = null
       this.selectedSeats = []
+      this.theatreStatus.reset()
     },
     onDateSelect(date) {
       this.selectedDate = date
       this.selectedScreening = null
       this.selectedSeats = []
+      this.theatreStatus.reset()
     },
     onTimeSelect(screening) {
-      this.theatreStatus.reset()
       this.selectedSeats = []
       this.selectedScreening = screening
       this.theatreStatus.beginLoading()
