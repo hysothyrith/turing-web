@@ -54,6 +54,19 @@
                     ><ph-ticket /><spacer size="2" />Get tickets</t-button
                   >
                 </div>
+                <div v-if="!hasScreenings" class="mt-4 text-less-prominent">
+                  {{
+                    isReleased
+                      ? 'Sorry, there aren’t any screenings for this movie yet.'
+                      : `Releasing ${new Date(
+                          currentMovie.releaseDate
+                        ).toLocaleDateString([], {
+                          weekday: 'long',
+                          day: 'numeric',
+                          month: 'short',
+                        })}`
+                  }}
+                </div>
               </div>
             </div>
             <div
@@ -169,9 +182,9 @@
 
 <script>
 import { mapState } from 'vuex'
-import AsyncStatus from '~/utils/AsyncStatus'
 import { Actions } from '~/constants'
 import { formatDate, formatTime } from '~/utils/dateTools'
+import AsyncStatus from '~/utils/AsyncStatus'
 import pluralizeIfNeeded from '~/mixins/pluralizeIfNeeded'
 
 export default {
@@ -223,6 +236,20 @@ export default {
         return { id: screening.id, startTime: formatTime(screening.start_time) }
       })
     },
+    isReleased() {
+      if (!this.currentMovie) return false
+      const today = (() => {
+        const date = new Date()
+        date.setHours(0)
+        date.setMinutes(0)
+        date.setSeconds(0)
+        date.setMilliseconds(0)
+        return date
+      })()
+      return (
+        new Date(this.currentMovie.releaseDate).getTime() <= today.getTime()
+      )
+    },
     selectionSummary() {
       return this.selectedSeats.map((seat) => seat.designation).join(', ')
     },
@@ -266,6 +293,7 @@ export default {
     }
   },
   methods: {
+    formatDate,
     playTrailer() {
       this.$modal.show('trailer-player')
     },
