@@ -38,10 +38,6 @@ const transitionDuration = 500
 
 export default {
   props: {
-    interval: {
-      type: Number,
-      required: true,
-    },
     movie: {
       type: Object,
       required: true,
@@ -53,20 +49,19 @@ export default {
       LEAVE,
       transition: LEAVE,
       currentMovie: this.movie,
-      ready: false,
     }
   },
   watch: {
     movie(newVal) {
-      this.leave()
-
-      // Prefetch the new movie's backdrop
       const backdrop = new Image()
       backdrop.src = `${this.$config.BASE_URL}/uploads/images/original${newVal.backdrop}`
-
-      setTimeout(() => {
-        this.currentMovie = newVal
-      }, transitionDuration)
+      backdrop.onload = () => {
+        this.$emit('next-ready')
+        this.leave()
+        setTimeout(() => {
+          this.currentMovie = newVal
+        }, transitionDuration)
+      }
     },
   },
   methods: {
@@ -75,10 +70,7 @@ export default {
     },
     enter() {
       this.transition = ENTER
-      if (!this.ready) {
-        this.$emit('ready')
-        this.ready = true
-      }
+      this.$emit('load')
     },
   },
 }

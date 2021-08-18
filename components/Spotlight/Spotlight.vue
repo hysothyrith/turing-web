@@ -1,18 +1,18 @@
 <template>
   <div class="spotlight">
     <spotlight-slide
-      v-if="status.isResolved()"
+      v-if="!$fetchState.pending"
       :movie="movies[index]"
       :interval="interval"
-      @ready="showControllers = true"
+      @load="onSlideLoad"
+      @next-ready="onNextSlideReady"
     />
-
     <fade-transition>
       <div v-if="showControllers" class="controller__container">
         <button
           v-for="i in movies.length"
           :key="i"
-          :class="['controller', { active: i - 1 === index }]"
+          :class="['controller', { active: i - 1 === controllersIndex }]"
           @click="onControllerClick(i - 1)"
         />
       </div>
@@ -23,10 +23,11 @@
 <script>
 import { mapState } from 'vuex'
 import { Actions } from '~/constants'
-import AsyncStatus from '~/utils/AsyncStatus'
 import grabSentences from '~/utils/grabSentences'
+import notifyApiError from '~/mixins/notifyApiError'
 
 export default {
+  mixins: [notifyApiError],
   props: {
     interval: {
       type: Number,
@@ -35,11 +36,17 @@ export default {
   },
   data() {
     return {
-      status: new AsyncStatus(),
       index: 0,
-      tick: null,
+      controllersIndex: 0,
+      timeout: null,
+      paused: false,
       showControllers: false,
     }
+  },
+  async fetch() {
+    await this.$store
+      .dispatch(Actions.getSpotlightMovies)
+      .catch(this.notifyApiError)
   },
   computed: {
     ...mapState({
@@ -49,29 +56,29 @@ export default {
         }),
     }),
   },
-  created() {
-    this.status.beginLoading()
-    this.$store
-      .dispatch(Actions.getSpotlightMovies)
-      .then(() => {
-        this.status.resolve()
-        this.tick = setInterval(this.next, this.interval)
-      })
-      .catch((err) => alert(err))
-  },
   methods: {
     next() {
       this.index = (this.index + 1) % this.movies.length
     },
     pause() {
-      clearInterval(this.tick)
+      this.paused = true
+      clearTimeout(this.timeout)
     },
     onControllerClick(index) {
       this.index = index
+      this.controllersIndex = index
       this.pause()
     },
-    onFirstReady() {
-      alert('ready')
+    onSlideLoad() {
+      if (!this.showControllers) {
+        this.showControllers = true
+      }
+      if (!this.paused) {
+        this.timeout = setTimeout(this.next, this.interval)
+      }
+    },
+    onNextSlideReady() {
+      this.controllersIndex = this.index
     },
   },
 }
