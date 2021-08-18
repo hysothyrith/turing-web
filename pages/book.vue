@@ -22,8 +22,48 @@
         </div>
         <div class="payment__form-wrapper">
           <div>
-            <h2>Payment details</h2>
-            <form class="payment__form" @submit.prevent="onSubmit">
+            <div class="mb-4">
+              <h2>Purchase summary</h2>
+              <ul class="seats__list">
+                <li
+                  v-for="(seats, type) in groupedSelectedSeats"
+                  :key="type"
+                  class="mb-3"
+                >
+                  <div class="d-flex justify-content-between">
+                    <strong class="text-prominent">{{ type }}</strong>
+                    ${{
+                      seats.reduce((acc, el) => acc + el.price, 0).toFixed(2)
+                    }}
+                  </div>
+                  <div>
+                    {{ seats.length > 1 ? 'Seats' : 'Seat' }}
+                    {{ seats.map((el) => el.designation).join(', ') }}
+                  </div>
+                </li>
+              </ul>
+              <div class="d-flex justify-content-end">
+                <div>
+                  <strong class="d-block text-prominent text-right"
+                    >Total</strong
+                  >
+                  <span class="h5-size text-right"
+                    >${{
+                      selectedSeats
+                        .reduce((acc, el) => acc + el.price, 0)
+                        .toFixed(2)
+                    }}</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <form
+              v-if="isAuthenticated"
+              class="payment__form"
+              @submit.prevent="onSubmit"
+            >
+              <h2>Payment details</h2>
               <div class="payment__fields-wrapper mb-4">
                 <div class="input-group">
                   <label for="cardholder-name">Cardholder name</label>
@@ -42,57 +82,20 @@
                   <input id="expiration" type="text" />
                 </div>
               </div>
-              <div class="mb-4">
-                <h2>Purchase summary</h2>
-                <ul class="seats__list">
-                  <li
-                    v-for="(seats, type) in groupedSelectedSeats"
-                    :key="type"
-                    class="mb-3"
-                  >
-                    <div class="d-flex justify-content-between">
-                      <strong class="text-prominent">{{ type }}</strong>
-                      ${{
-                        seats.reduce((acc, el) => acc + el.price, 0).toFixed(2)
-                      }}
-                    </div>
-                    <div>
-                      {{ seats.length > 1 ? 'Seats' : 'Seat' }}
-                      {{ seats.map((el) => el.designation).join(', ') }}
-                    </div>
-                  </li>
-                </ul>
-                <div class="d-flex justify-content-end">
-                  <div>
-                    <strong class="d-block text-prominent text-right"
-                      >Total</strong
-                    >
-                    <span class="h5-size text-right"
-                      >${{
-                        selectedSeats
-                          .reduce((acc, el) => acc + el.price, 0)
-                          .toFixed(2)
-                      }}</span
-                    >
-                  </div>
-                </div>
-              </div>
-              <div v-if="isAuthenticated">
-                <t-button type="submit" :loading="purchaseStatus.isLoading()"
-                  ><ph-check class="mr-2" />Confirm</t-button
-                >
-              </div>
-              <div v-else>
-                <t-button @click.prevent="$modal.show('login')"
-                  >Log&nbsp;in</t-button
-                >
-                or
-                <t-button variant="text" @click.prevent="$modal.show('signup')"
-                  >Sign&nbsp;up</t-button
-                >
-                to continue
-              </div>
+              <t-button type="submit" :loading="purchaseStatus.isLoading()"
+                ><ph-check class="mr-2" />Confirm</t-button
+              >
             </form>
+            <div v-else>
+              <t-button @click.prevent="$modal.show('login')"
+                >Log&nbsp;in</t-button
+              >
+              or
+              <t-button variant="text" @click.prevent="$modal.show('signup')"
+                >Sign&nbsp;up</t-button
+              >
+              to continue
+            </div>
           </div>
         </div>
       </main>
