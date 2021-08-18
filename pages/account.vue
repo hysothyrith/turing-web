@@ -2,7 +2,9 @@
   <div>
     <h1>Account</h1>
     <div>
-      <t-button @click="onLogoutClick">Log out</t-button>
+      <t-button @click="onLogoutClick"
+        ><ph-sign-out class="mr-2" />Log out</t-button
+      >
     </div>
   </div>
 </template>

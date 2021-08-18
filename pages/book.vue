@@ -83,15 +83,18 @@
                 </div>
               </div>
               <t-button type="submit" :loading="purchaseStatus.isLoading()"
-                ><ph-check class="mr-2" />Confirm</t-button
+                ><ph-checks class="mr-2" />Confirm</t-button
               >
             </form>
-            <div v-else>
+            <div v-else class="d-flex align-items-center">
               <t-button @click.prevent="$modal.show('login')"
-                >Log&nbsp;in</t-button
+                ><ph-sign-in class="mr-2" />Log&nbsp;in</t-button
               >
-              or
-              <t-button variant="text" @click.prevent="$modal.show('signup')"
+              <span class="ml-3">or</span>
+              <t-button
+                variant="text"
+                class="mx-2"
+                @click.prevent="$modal.show('signup')"
                 >Sign&nbsp;up</t-button
               >
               to continue

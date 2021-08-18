@@ -35,7 +35,7 @@
               tickets: screening.tickets,
             })
           "
-          ><ph-ticket class="mr-2" />Show tickets</t-button
+          ><ph-qr-code class="mr-2" />Show tickets</t-button
         >
       </div>
     </li>

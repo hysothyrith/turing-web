@@ -1,7 +1,4 @@
 import Vue from 'vue'
-// import PhosphorVue from 'phosphor-vue'
-
-// Vue.use(PhosphorVue)
 
 import {
   PhPlay,
@@ -9,7 +6,10 @@ import {
   PhCaretRight,
   PhCaretLeft,
   PhCaretDown,
-  PhCheck,
+  PhChecks,
+  PhQrCode,
+  PhSignIn,
+  PhSignOut,
 } from 'phosphor-vue'
 
 const icons = Object.assign(
@@ -20,7 +20,10 @@ const icons = Object.assign(
     PhCaretRight,
     PhCaretLeft,
     PhCaretDown,
-    PhCheck,
+    PhChecks,
+    PhQrCode,
+    PhSignIn,
+    PhSignOut,
   }
 )
 
