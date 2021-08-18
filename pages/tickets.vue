@@ -6,83 +6,17 @@
       <div v-else>
         <div v-if="!objIsEmpty(summary.newScreenings)">
           <h2>Upcoming screenings</h2>
-          <ul class="ticket__list">
-            <li
-              v-for="(screening, screeningId) in summary.newScreenings"
-              :key="screeningId"
-              class="ticket__item"
-            >
-              <div>
-                <picture class="movie__picture">
-                  <source
-                    :srcset="`${$config.BASE_URL}/uploads/images/w500/${screening.movie.poster}`"
-                    media="(min-width: 768px)"
-                  />
-                  <img
-                    :src="`${$config.BASE_URL}/uploads/images/w500/${screening.movie.backdrop}`"
-                    :alt="`${screening.movie.title} media image`"
-                  />
-                </picture>
-              </div>
-              <div>
-                <tickets-summary
-                  :movie="screening.movie"
-                  :cinema-name="screening.cinema.name"
-                  :theatre-name="screening.details.theatre"
-                  :seat-names="
-                    screening.tickets.map((el) => el.seat).join(', ')
-                  "
-                  :date-string="screening.details.date"
-                  :time-string="screening.details.startTime"
-                />
-                <t-button
-                  class="mt-6"
-                  @click="
-                    onShowTicketsClick({
-                      movie: screening.movie,
-                      tickets: screening.tickets,
-                    })
-                  "
-                  ><ph-ticket class="mr-2" />Show tickets</t-button
-                >
-              </div>
-            </li>
-          </ul>
+          <tickets-list
+            :screenings="summary.newScreenings"
+            @show-tickets-click="onShowTicketsClick"
+          />
         </div>
         <div v-if="!objIsEmpty(summary.pastScreenings)">
           <h2>Past tickets</h2>
-          <ul class="ticket__list">
-            <li
-              v-for="(screening, screeningId) in summary.pastScreenings"
-              :key="screeningId"
-              class="ticket__item"
-            >
-              <div>
-                <picture class="movie__picture">
-                  <source
-                    :srcset="`${$config.BASE_URL}/uploads/images/w500/${screening.movie.poster}`"
-                    media="(min-width: 768px)"
-                  />
-                  <img
-                    :src="`${$config.BASE_URL}/uploads/images/w500/${screening.movie.backdrop}`"
-                    :alt="`${screening.movie.title} media image`"
-                  />
-                </picture>
-              </div>
-              <div>
-                <tickets-summary
-                  :movie="screening.movie"
-                  :cinema-name="screening.cinema.name"
-                  :theatre-name="screening.details.theatre"
-                  :seat-names="
-                    screening.tickets.map((el) => el.seat).join(', ')
-                  "
-                  :date-string="screening.details.date"
-                  :time-string="screening.details.startTime"
-                />
-              </div>
-            </li>
-          </ul>
+          <tickets-list
+            :screenings="summary.pastScreenings"
+            :show-tickets="false"
+          />
         </div>
         <div v-if="noTickets">You don’t have any tickets yet.</div>
       </div>
@@ -182,41 +116,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-.ticket__list {
-  list-style: none;
-  padding: 0;
-}
-
-.ticket__item {
-  display: grid;
-  grid-template-rows: 120px;
-  grid-auto-rows: min-content;
-  gap: var(--spacing-4);
-  padding-bottom: var(--spacing-4);
-  margin-bottom: var(--spacing-8);
-  border-bottom: var(--b-width) solid var(--color-muted);
-}
-
-.movie__picture img {
-  object-fit: cover;
-  object-position: top;
-}
-
-@media only screen and (min-width: 768px) {
-  .ticket__item {
-    grid-template-columns: 200px auto;
-    grid-template-rows: min-content;
-    gap: var(--spacing-8);
-  }
-
-  .ticket__item .poster {
-    display: block;
-  }
-
-  .ticket__item .backdrop {
-    display: none;
-  }
-}
-</style>
