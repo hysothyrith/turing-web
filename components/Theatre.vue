@@ -69,7 +69,7 @@ export default {
 <style scoped>
 .wrapper {
   border: var(--b-width) solid var(--color-muted);
-  padding: var(--spacing-4) var(--spacing-2);
+  padding: var(--spacing-8) var(--spacing-4);
 }
 
 .grid {
