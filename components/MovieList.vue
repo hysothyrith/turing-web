@@ -1,7 +1,7 @@
 <template>
   <div class="movie-list">
     <template v-if="loading">
-      <skeleton width="26ch" height="1.8rem" border-radius="1rem" />
+      <skeleton width="26ch" height="1.9rem" border-radius="1rem" />
       <spacer size="1" />
       <div class="posters">
         <skeleton
@@ -53,7 +53,7 @@ export default {
     if (window.innerWidth < 768) {
       this.skeletonCount = Math.floor(window.innerWidth / 160)
     } else {
-      this.skeletonCount = Math.floor(window.innerWidth / 240)
+      this.skeletonCount = Math.floor(window.innerWidth / 250)
     }
   },
 }

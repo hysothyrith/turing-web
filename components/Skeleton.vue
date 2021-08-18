@@ -49,7 +49,7 @@ export default {
 
 <style scoped>
 .skeleton {
-  background-color: grey;
+  background-color: #373737;
   animation: pulse 2s infinite;
   opacity: 0;
   transition: opacity 200ms ease;
@@ -61,13 +61,13 @@ export default {
 
 @keyframes pulse {
   0% {
-    background-color: grey;
+    background-color: #373737;
   }
   70% {
-    background-color: #454545;
+    background-color: #505050;
   }
   100% {
-    background-color: grey;
+    background-color: #373737;
   }
 }
 </style>
