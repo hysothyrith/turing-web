@@ -1,6 +1,6 @@
 <template>
   <div
-    class="skeleton"
+    :class="['skeleton', { show }]"
     :style="{
       width,
       height,
@@ -17,6 +17,10 @@ export default {
       type: Number,
       default: 0,
     },
+    enterDelay: {
+      type: Number,
+      default: 200,
+    },
     width: {
       type: String,
       default: '100%',
@@ -30,6 +34,16 @@ export default {
       default: '0',
     },
   },
+  data() {
+    return {
+      show: false,
+    }
+  },
+  mounted() {
+    setTimeout(() => {
+      this.show = true
+    }, this.enterDelay)
+  },
 }
 </script>
 
@@ -37,6 +51,12 @@ export default {
 .skeleton {
   background-color: grey;
   animation: pulse 2s infinite;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.skeleton.show {
+  opacity: 1;
 }
 
 @keyframes pulse {
