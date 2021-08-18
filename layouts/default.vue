@@ -18,6 +18,16 @@ export default {
     weight: 'light',
     mirrored: false,
   },
+  errorCaptured(err) {
+    if (process.env.NODE_ENV !== 'production') {
+      this.$toast.error(err.message)
+    } else {
+      this.$toast.error(
+        'Sorry, something went wrong on our end. Please try again later.'
+      )
+      return false
+    }
+  },
 }
 </script>
 
