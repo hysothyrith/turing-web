@@ -57,8 +57,11 @@ export default {
     }),
   },
   methods: {
+    nextIndex() {
+      return (this.index + 1) % this.movies.length
+    },
     next() {
-      this.index = (this.index + 1) % this.movies.length
+      this.index = this.nextIndex()
     },
     pause() {
       this.paused = true
@@ -74,6 +77,11 @@ export default {
         this.showControllers = true
       }
       if (!this.paused) {
+        /* attempt to load next backdrop before next slide tick */
+        const nextBackdrop = new Image()
+        nextBackdrop.src = `${this.$config.BASE_URL}/uploads/images/original${
+          this.movies[this.nextIndex()].backdrop
+        }`
         this.timeout = setTimeout(this.next, this.interval)
       }
     },
