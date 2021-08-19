@@ -248,6 +248,7 @@ export const actions = {
         name: data.theatreName,
         rows: data.row,
         cols: data.col,
+        seatTypes: data.seatTypes,
       },
     }
     screening.theatre.grid = data.grid.map((row) => {

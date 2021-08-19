@@ -1,33 +1,48 @@
 <template>
-  <div class="wrapper">
-    <theatre-screen style="opacity: 0.9" />
-    <div
-      class="grid"
-      :style="{ gridTemplateColumns: `repeat(${value.cols}, 1fr)` }"
-    >
-      <template v-for="(row, i) in value.grid">
-        <template v-for="(cell, j) in row">
-          <div :key="`${i},${j}`" class="cell">
-            <button
-              v-if="cell"
-              v-tooltip="
-                seatIsAvailable(cell)
-                  ? `${cell.designation} | ${cell.type.name}`
-                  : 'Seat unavailable'
-              "
-              class="seat"
-              :disabled="!seatIsAvailable(cell)"
-              :style="{
-                borderColor: cell.type.color,
-                backgroundColor: seatIsSelected(cell)
-                  ? cell.type.color
-                  : 'transparent',
-              }"
-              @click="onSeatClick(cell)"
-            ></button>
-          </div>
+  <div>
+    <div class="inner">
+      <theatre-screen style="opacity: 0.9" />
+      <div
+        class="grid"
+        :style="{ gridTemplateColumns: `repeat(${value.cols}, 1fr)` }"
+      >
+        <template v-for="(row, i) in value.grid">
+          <template v-for="(cell, j) in row">
+            <div :key="`${i},${j}`" class="cell">
+              <button
+                v-if="cell"
+                v-tooltip="
+                  seatIsAvailable(cell)
+                    ? `${cell.designation} | ${cell.type.name}`
+                    : 'Seat unavailable'
+                "
+                class="seat"
+                :disabled="!seatIsAvailable(cell)"
+                :style="{
+                  borderColor: cell.type.color,
+                  backgroundColor: seatIsSelected(cell)
+                    ? cell.type.color
+                    : 'transparent',
+                }"
+                @click="onSeatClick(cell)"
+              />
+            </div>
+          </template>
         </template>
-      </template>
+      </div>
+    </div>
+    <div class="mt-2">
+      <span
+        v-for="type in value.seatTypes"
+        :key="type.id"
+        class="mr-6 d-inline-flex align-items-center"
+      >
+        <span
+          class="type__color-circle"
+          :style="{ backgroundColor: type.color }"
+        />
+        <small>{{ type.name }}</small>
+      </span>
     </div>
   </div>
 </template>
@@ -67,7 +82,7 @@ export default {
 </script>
 
 <style scoped>
-.wrapper {
+.inner {
   border: var(--b-width) solid var(--color-muted);
   padding: var(--spacing-8) var(--spacing-4);
   border-radius: 4px;
@@ -104,5 +119,13 @@ export default {
 .seat:disabled {
   opacity: 0.2;
   cursor: not-allowed;
+}
+
+.type__color-circle {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  margin-right: var(--spacing-2);
 }
 </style>
