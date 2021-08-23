@@ -289,12 +289,12 @@ export const actions = {
     })
     commit(Mutations.SET_TICKETS, tickets)
   },
-  async [Actions.getCinemas]({ commit }) {
-    const data = await this.$axios.$get('cinemas')
-    commit(Mutations.SET_CINEMAS, data)
+  async [Actions.getCinemas](context) {
+    const data = await cachedCaller(context, this.$axios).get('cinemas')
+    context.commit(Mutations.SET_CINEMAS, data)
   },
-  async [Actions.getConcession]({ commit }) {
-    const data = await this.$axios.$get('products')
-    commit(Mutations.SET_CONCESSION, data)
+  async [Actions.getConcession](context) {
+    const data = await cachedCaller(context, this.$axios).get('products')
+    context.commit(Mutations.SET_CONCESSION, data)
   },
 }
