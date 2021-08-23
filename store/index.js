@@ -295,6 +295,24 @@ export const actions = {
   },
   async [Actions.getConcession](context) {
     const data = await cachedCaller(context, this.$axios).get('products')
-    context.commit(Mutations.SET_CONCESSION, data)
+    /* 
+      {
+        category {
+          products[]
+        }
+      }
+    */
+    const concession = data.reduce((acc, el) => {
+      if (!acc[el.category]) {
+        acc[el.category] = { products: [] }
+      }
+      acc[el.category].products.push({
+        id: el.id,
+        name: el.name,
+        photo: el.photo,
+      })
+      return acc
+    }, {})
+    context.commit(Mutations.SET_CONCESSION, concession)
   },
 }
