@@ -53,13 +53,19 @@ export default {
   font-size: 0.889rem;
   border-radius: var(--b-radius);
   border: var(--b-width) solid var(--color-primary);
+  background-color: var(--color-prominent);
   cursor: pointer;
   display: inline-flex;
   justify-content: center;
   align-items: center;
   position: relative;
   transition: background-color 100ms ease, border-color 100ms ease;
-  background-color: var(--color-prominent);
+}
+
+.button:focus,
+.button:hover {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
 }
 
 .button:active {
@@ -75,7 +81,12 @@ export default {
 .button.text {
   background-color: transparent;
   border: none;
-  padding: 0;
+  padding: var(--spacing-2);
+}
+
+.button.text:hover,
+.button.text:focus {
+  background-color: var(--color-muted);
 }
 
 .slot__wrapper {

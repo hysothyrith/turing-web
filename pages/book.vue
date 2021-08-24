@@ -93,7 +93,7 @@
               <span class="ml-3">or</span>
               <t-button
                 variant="text"
-                class="mx-2"
+                class="mx-1"
                 @click.prevent="$modal.show('signup')"
                 >Sign&nbsp;up</t-button
               >

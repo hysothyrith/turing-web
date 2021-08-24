@@ -11,10 +11,10 @@
         <t-tab title="Profile" selected class="tab">
           <profile-update-form />
         </t-tab>
-        <t-tab title="Change password">
+        <t-tab title="Change password" class="tab">
           <password-update-form />
         </t-tab>
-        <t-tab title="Payment methods"> Under construction </t-tab>
+        <t-tab title="Payment methods" class="tab"> Under construction </t-tab>
       </t-tabs>
     </main>
   </div>
