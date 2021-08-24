@@ -1,6 +1,12 @@
 export default {
   methods: {
     notifyApiError(err) {
+      if (!err.response) {
+        this.$toast.error(
+          'An unexpected application error occured. Please try again later.'
+        )
+      }
+
       const { data } = err.response
       switch (data.type) {
         case 'ConstraintViolationError':

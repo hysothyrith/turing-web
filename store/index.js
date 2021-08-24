@@ -1,4 +1,5 @@
 import { Actions, Getters, Mutations } from '~/constants'
+import { mapKeys } from '~/utils/objects'
 
 function cachedCaller(context, axios, cacheTimeout = 1000 * 60 * 5) {
   async function get(route) {
@@ -322,5 +323,11 @@ export const actions = {
   async [Actions.updateUserInfo]({ commit }, data) {
     await this.$axios.$put('profile', data)
     commit(Mutations.SET_USER_INFO, data)
+  },
+  async [Actions.updatePassword](_, data) {
+    await this.$axios.$patch(
+      'profile',
+      mapKeys({ newPassword: 'password' })(data)
+    )
   },
 }

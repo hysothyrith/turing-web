@@ -11,7 +11,9 @@
         <t-tab title="Profile" selected class="tab">
           <profile-update-form />
         </t-tab>
-        <t-tab title="Change password"> Under construction </t-tab>
+        <t-tab title="Change password">
+          <password-update-form />
+        </t-tab>
         <t-tab title="Payment methods"> Under construction </t-tab>
       </t-tabs>
     </main>
