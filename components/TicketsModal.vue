@@ -66,7 +66,7 @@ export default {
       this.qrStatus.resolve()
     },
     getQrUrl(payload) {
-      return `https://api.qrserver.com/v1/create-qr-code/?data=${payload}!&size=500x500`
+      return `https://api.qrserver.com/v1/create-qr-code/?data=${payload}&size=500x500`
     },
   },
 }
