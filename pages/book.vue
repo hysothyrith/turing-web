@@ -186,9 +186,10 @@ export default {
         })
         .then(() => {
           this.purchaseStatus.resolve()
+          this.$toast.success('Ticket purchased successfully.')
           this.$router.push('/tickets')
         })
-        .catch((err) => alert(err))
+        .catch(this.notifyApiError)
     },
   },
 }
