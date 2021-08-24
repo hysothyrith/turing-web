@@ -73,6 +73,10 @@ export const mutations = {
     localStorage.removeItem('user')
     localStorage.removeItem('token')
   },
+  [Mutations.SET_USER_INFO](state, userInfo) {
+    state.user = userInfo
+    localStorage.setItem('user', JSON.stringify(userInfo))
+  },
   [Mutations.SET_CURRENT_ROUTE_META](state, meta) {
     state.currentRouteMeta = meta
   },
@@ -314,5 +318,9 @@ export const actions = {
       return acc
     }, {})
     context.commit(Mutations.SET_CONCESSION, concession)
+  },
+  async [Actions.updateUserInfo]({ commit }, data) {
+    await this.$axios.$put('profile', data)
+    commit(Mutations.SET_USER_INFO, data)
   },
 }

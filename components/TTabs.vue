@@ -52,10 +52,8 @@ export default {
   font-size: var(--size-h5);
   color: var(--color-primary);
   background-color: transparent;
-  /* border: none; */
-  /* outline: none; */
   padding-left: 0;
-  margin-right: var(--spacing-6);
+  margin-right: var(--spacing-4);
 }
 
 .tab__header.selected {
