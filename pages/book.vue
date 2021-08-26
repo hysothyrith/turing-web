@@ -58,7 +58,7 @@
               </div>
             </div>
             <div v-if="isAuthenticated">
-              <form>
+              <form @submit.prevent="onSubmit">
                 <payment-method-selector
                   v-model="selectedPaymentMethodId"
                   @form-show="cardFormIsActive = true"
