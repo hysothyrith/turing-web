@@ -26,6 +26,11 @@
 import { Mutations } from '~/constants'
 
 export default {
+  meta: {
+    auth: {
+      protected: true,
+    },
+  },
   data() {
     return {
       userInfo: null,
