@@ -57,35 +57,54 @@
                 </div>
               </div>
             </div>
+            <div v-if="isAuthenticated">
+              <credit-card-form
+                v-if="cardFormIsActive"
+                class="mt-4"
+                @on-complete="cardFormIsActive = false"
+              />
+              <form v-else @submit.prevent="onSubmit">
+                <h2>Payment method</h2>
+                <ul class="method__list">
+                  <li
+                    v-for="method in paymentMethods"
+                    :key="method.id"
+                    :class="[
+                      'method__item',
+                      { selected: selectedPaymentMethodId === method.id },
+                    ]"
+                  >
+                    <div class="ts">
+                      {{ method.brand }} ending in {{ method.last4 }}
+                    </div>
+                    <t-button
+                      variant="text"
+                      class="select__button"
+                      :disabled="selectedPaymentMethodId === method.id"
+                      @click="selectedPaymentMethodId = method.id"
+                    >
+                      {{
+                        selectedPaymentMethodId !== method.id
+                          ? 'Select'
+                          : 'Selected'
+                      }}
+                    </t-button>
+                  </li>
+                </ul>
 
-            <form
-              v-if="isAuthenticated"
-              class="payment__form"
-              @submit.prevent="onSubmit"
-            >
-              <h2>Payment details</h2>
-              <div class="payment__fields-wrapper mb-4">
-                <div class="input-group">
-                  <label for="cardholder-name">Cardholder name</label>
-                  <input id="cardholder-name" type="text" />
+                <t-button variant="text" @click="cardFormIsActive = true"
+                  ><ph-plus class="mr-2" />Add new</t-button
+                >
+                <div class="mt-6">
+                  <t-button
+                    type="submit"
+                    :loading="purchaseStatus.isLoading()"
+                    :disabled="selectedPaymentMethodId === 0"
+                    ><ph-checks class="mr-2" />Purchase</t-button
+                  >
                 </div>
-                <div class="input-group">
-                  <label for="card-number">Card number</label>
-                  <input id="card-number" type="text" />
-                </div>
-                <div class="input-group">
-                  <label for="cvv">CVV</label>
-                  <input id="cvv" type="text" placeholder="123" />
-                </div>
-                <div class="input-group">
-                  <label for="expiration">Expiration</label>
-                  <input id="expiration" type="text" />
-                </div>
-              </div>
-              <t-button type="submit" :loading="purchaseStatus.isLoading()"
-                ><ph-checks class="mr-2" />Confirm</t-button
-              >
-            </form>
+              </form>
+            </div>
             <div v-else class="d-flex align-items-center">
               <t-button @click.prevent="$modal.show('login')"
                 ><ph-sign-in class="mr-2" />Log&nbsp;in</t-button
@@ -117,6 +136,8 @@ export default {
   data() {
     return {
       purchaseStatus: new AsyncStatus(),
+      selectedPaymentMethodId: 0,
+      cardFormIsActive: false,
     }
   },
   async fetch() {
@@ -124,10 +145,11 @@ export default {
     await Promise.all([
       this.$store.dispatch(Actions.getMovie, this.$route.query.movie),
       this.$store.dispatch(Actions.getScreening, this.$route.query.screening),
+      this.$store.dispatch(Actions.getPaymentMethods),
     ]).catch(this.notifyApiError)
   },
   computed: {
-    ...mapState(['currentMovie', 'currentScreening']),
+    ...mapState(['currentMovie', 'currentScreening', 'paymentMethods']),
     ...mapGetters(['isAuthenticated']),
     currentScreeningInfo() {
       if (!this.currentMovie) return null
@@ -183,6 +205,7 @@ export default {
           theatreName: this.currentScreening.theatre.name,
           movieName: this.currentMovie.title,
           seats: this.selectedSeats.map((el) => el.id),
+          paymentMethodId: this.selectedPaymentMethodId,
         })
         .then(() => {
           this.purchaseStatus.resolve()
@@ -229,6 +252,25 @@ export default {
 .seats__list {
   list-style: none;
   padding: 0;
+}
+
+.method__list {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: var(--spacing-2);
+}
+
+.method__item {
+  border-bottom: 1px solid var(--color-muted);
+  padding: var(--spacing-3) 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.method__item.selected {
+  color: var(--color-prominent);
+  font-weight: bold;
 }
 
 @media only screen and (min-width: 768px) {

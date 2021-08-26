@@ -3,11 +3,16 @@
     v-if="!showConfirmation"
     v-bind="$attrs"
     v-on="$listeners"
-    @click.prevent="showConfirmation = true"
+    @click.stop="showConfirmation = true"
   >
     <slot />
   </t-button>
-  <span v-else class="confirmation">
+  <span
+    v-else
+    class="confirmation"
+    @mouseenter="onMouseEnter"
+    @mouseleave="onMouseLeave"
+  >
     {{ message }}
     <t-button
       variant="text"
@@ -33,7 +38,18 @@ export default {
   data() {
     return {
       showConfirmation: false,
+      dismissTimeout: null,
     }
+  },
+  methods: {
+    onMouseEnter() {
+      clearTimeout(this.dismissTimeout)
+    },
+    onMouseLeave() {
+      this.dismissTimeout = setTimeout(() => {
+        this.showConfirmation = false
+      }, 1000)
+    },
   },
 }
 </script>

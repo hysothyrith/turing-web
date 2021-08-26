@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="onSubmit">
-    <h3 class="h5-size">Card details</h3>
+    <h2>Card details</h2>
     <div class="payment__fields-wrapper mb-4">
       <div class="card-number__field">
         <label for="card-number">Card number</label>
@@ -35,7 +35,7 @@
     </div>
     <div class="d-flex align-items-center">
       <t-button type="submit" :loading="status.isLoading()"
-        ><ph-checks class="mr-2" />Confirm</t-button
+        ><ph-plus class="mr-2" />Add</t-button
       >
       <t-button
         variant="text"

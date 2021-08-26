@@ -287,7 +287,10 @@ export const actions = {
     commit(Mutations.SET_CURRENT_SCREENING, screening)
   },
   async [Actions.purchaseTickets](_, data) {
-    await this.$axios.$post('tickets', data)
+    await this.$axios.$post(
+      'tickets',
+      mapKeys({ paymentMethodId: 'paymentId' })(data)
+    )
   },
   async [Actions.getTickets]({ commit }) {
     const data = await this.$axios.$get('tickets')
