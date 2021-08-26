@@ -121,6 +121,9 @@ export const mutations = {
   [Mutations.INSERT_PAYMENT_METHOD](state, method) {
     state.paymentMethods.push(method)
   },
+  [Mutations.REMOVE_PAYMENT_METHOD](state, id) {
+    state.paymentMethods = state.paymentMethods.filter((el) => el.id !== id)
+  },
 }
 
 export const getters = {
@@ -347,5 +350,9 @@ export const actions = {
       mapKeys({ expYear: 'exp_year', expMonth: 'exp_month' })(data)
     )
     commit(Mutations.INSERT_PAYMENT_METHOD, res)
+  },
+  async [Actions.deletePaymentMethod]({ commit }, id) {
+    await this.$axios.$delete(`payments/${id}`)
+    commit(Mutations.REMOVE_PAYMENT_METHOD, id)
   },
 }

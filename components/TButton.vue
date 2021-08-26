@@ -10,13 +10,16 @@
         <spinner
           :animation-duration="1000"
           :size="24"
-          color="black" /></client-only
+          :color="
+            variant === 'text' ? 'var(--color-primary)' : 'black'
+          " /></client-only
     ></span>
     <span
       :class="[
         'slot__wrapper',
         { 'slot__wrapper--primary': color === 'primary' },
         { 'slot__wrapper--prominent': color === 'prominent' },
+        { 'slot__wrapper--negative': color === 'negative' },
       ]"
     >
       <slot />
@@ -109,6 +112,10 @@ export default {
 
 .button.text .slot__wrapper--prominent {
   color: var(--color-prominent);
+}
+
+.button.text .slot__wrapper--negative {
+  color: var(--color-negative);
 }
 
 .spinner__wrapper {

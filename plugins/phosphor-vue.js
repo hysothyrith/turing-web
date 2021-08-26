@@ -11,6 +11,7 @@ import {
   PhSignIn,
   PhSignOut,
   PhPlus,
+  PhTrashSimple,
 } from 'phosphor-vue'
 
 const icons = Object.assign(
@@ -26,6 +27,7 @@ const icons = Object.assign(
     PhSignIn,
     PhSignOut,
     PhPlus,
+    PhTrashSimple,
   }
 )
 
