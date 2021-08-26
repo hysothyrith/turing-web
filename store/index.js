@@ -59,6 +59,7 @@ export const state = () => ({
   concession: [],
   currentRouteMeta: {},
   cache: {},
+  paymentMethods: [],
 })
 
 export const mutations = {
@@ -113,6 +114,12 @@ export const mutations = {
   },
   [Mutations.SET_CONCESSION](state, concession) {
     state.concession = concession
+  },
+  [Mutations.SET_PAYMENT_METHODS](state, methods) {
+    state.paymentMethods = methods
+  },
+  [Mutations.INSERT_PAYMENT_METHOD](state, method) {
+    state.paymentMethods.push(method)
   },
 }
 
@@ -329,5 +336,16 @@ export const actions = {
       'profile',
       mapKeys({ newPassword: 'password' })(data)
     )
+  },
+  async [Actions.getPaymentMethods]({ commit }) {
+    const res = await this.$axios.$get('payments')
+    commit(Mutations.SET_PAYMENT_METHODS, res)
+  },
+  async [Actions.addPaymentMethod]({ commit }, data) {
+    const res = await this.$axios.$post(
+      'payments',
+      mapKeys({ expYear: 'exp_year', expMonth: 'exp_month' })(data)
+    )
+    commit(Mutations.INSERT_PAYMENT_METHOD, res)
   },
 }

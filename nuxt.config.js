@@ -30,6 +30,7 @@ export default {
     '~plugins/vue-js-modal.js',
     '~plugins/phosphor-vue.js',
     '~plugins/v-tooltip.js',
+    '~plugins/vue-the-mask.js',
     { src: '~plugins/epic-spinners.js', mode: 'client' },
   ],
 

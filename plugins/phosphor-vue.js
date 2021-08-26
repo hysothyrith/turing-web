@@ -10,6 +10,7 @@ import {
   PhQrCode,
   PhSignIn,
   PhSignOut,
+  PhPlus,
 } from 'phosphor-vue'
 
 const icons = Object.assign(
@@ -24,6 +25,7 @@ const icons = Object.assign(
     PhQrCode,
     PhSignIn,
     PhSignOut,
+    PhPlus,
   }
 )
 
