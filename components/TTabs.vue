@@ -1,9 +1,11 @@
 <template>
-  <div class="tabs HIDE-DEBUG">
-    <ul class="tabs__header DEBUG-R">
+  <div class="tabs">
+    <ul class="tabs__header" role="tablist" aria-label="Tabs">
       <li v-for="(tab, i) in tabs" :key="tab.title">
         <button
-          :class="['tab__header DEBUG-G', { selected: i === selectedIndex }]"
+          role="tab"
+          :aria-selected="i === selectedIndex"
+          :class="['tab__header', { selected: i === selectedIndex }]"
           @click="selectTab(i)"
         >
           {{ tab.title }}
@@ -54,6 +56,7 @@ export default {
   background-color: transparent;
   padding-left: 0;
   margin-right: var(--spacing-4);
+  border: none;
 }
 
 .tab__header.selected {
