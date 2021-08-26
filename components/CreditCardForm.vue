@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="onSubmit">
-    <h2>Card details</h2>
+    <h2 class="mb-4">Card details</h2>
     <div class="payment__fields-wrapper mb-4">
       <div class="card-number__field">
         <label for="card-number">Card number</label>
@@ -39,10 +39,8 @@
       >
       <t-button
         variant="text"
-        type="submit"
-        :loading="status.isLoading()"
         class="mx-4"
-        @click="$emit('on-complete')"
+        @click.prevent="$emit('on-complete')"
         >Cancel</t-button
       >
     </div>

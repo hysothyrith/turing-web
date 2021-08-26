@@ -1,8 +1,8 @@
 <template>
   <fade-transition>
-    <loading-box v-if="$fetchState.pending" />
+    <simple-loading-box v-if="$fetchState.pending" />
     <div v-else>
-      <p v-if="paymentMethods.length === 0">
+      <p v-if="paymentMethods.length === 0 && !formIsActive">
         You don’t have any payment methods yet.
       </p>
       <ul v-else class="method__list">

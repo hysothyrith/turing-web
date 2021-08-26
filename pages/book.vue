@@ -23,7 +23,7 @@
         <div class="payment__form-wrapper">
           <div>
             <div class="mb-4">
-              <h2>Purchase summary</h2>
+              <h2 class="mb-4">Purchase summary</h2>
               <ul class="seats__list">
                 <li
                   v-for="(seats, type) in groupedSelectedSeats"
@@ -58,45 +58,15 @@
               </div>
             </div>
             <div v-if="isAuthenticated">
-              <credit-card-form
-                v-if="cardFormIsActive"
-                class="mt-4"
-                @on-complete="cardFormIsActive = false"
-              />
-              <form v-else @submit.prevent="onSubmit">
-                <h2>Payment method</h2>
-                <ul class="method__list">
-                  <li
-                    v-for="method in paymentMethods"
-                    :key="method.id"
-                    :class="[
-                      'method__item',
-                      { selected: selectedPaymentMethodId === method.id },
-                    ]"
-                  >
-                    <div class="ts">
-                      {{ method.brand }} ending in {{ method.last4 }}
-                    </div>
-                    <t-button
-                      variant="text"
-                      class="select__button"
-                      :disabled="selectedPaymentMethodId === method.id"
-                      @click="selectedPaymentMethodId = method.id"
-                    >
-                      {{
-                        selectedPaymentMethodId !== method.id
-                          ? 'Select'
-                          : 'Selected'
-                      }}
-                    </t-button>
-                  </li>
-                </ul>
-
-                <t-button variant="text" @click="cardFormIsActive = true"
-                  ><ph-plus class="mr-2" />Add new</t-button
-                >
+              <form>
+                <payment-method-selector
+                  v-model="selectedPaymentMethodId"
+                  @form-show="cardFormIsActive = true"
+                  @form-hide="cardFormIsActive = false"
+                />
                 <div class="mt-6">
                   <t-button
+                    v-if="!cardFormIsActive"
                     type="submit"
                     :loading="purchaseStatus.isLoading()"
                     :disabled="selectedPaymentMethodId === 0"
@@ -145,11 +115,10 @@ export default {
     await Promise.all([
       this.$store.dispatch(Actions.getMovie, this.$route.query.movie),
       this.$store.dispatch(Actions.getScreening, this.$route.query.screening),
-      this.$store.dispatch(Actions.getPaymentMethods),
     ]).catch(this.notifyApiError)
   },
   computed: {
-    ...mapState(['currentMovie', 'currentScreening', 'paymentMethods']),
+    ...mapState(['currentMovie', 'currentScreening']),
     ...mapGetters(['isAuthenticated']),
     currentScreeningInfo() {
       if (!this.currentMovie) return null
