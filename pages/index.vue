@@ -22,18 +22,12 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 import { Actions } from '~/constants'
-import AsyncStatus from '~/utils/AsyncStatus'
 import preloadImages from '~/utils/preloadImages'
 import { runTimedPromise } from '~/utils/asyncTools'
 
 export default Vue.extend({
   layout: 'home',
   fetchDelay: 0,
-  data() {
-    return {
-      status: new AsyncStatus(),
-    }
-  },
   async fetch() {
     await this.$store.dispatch(Actions.getMovies)
     const mapPosters = (el) =>
